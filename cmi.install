@@ -66,7 +66,7 @@ function cmi_install() {
                   PRIMARY KEY  (coid),
                   KEY nid (nid,uid)
                 ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE {cmi_objectives_score} (
+       db_query("CREATE TABLE {cmi_objectives_score} (
                   cosid int(10) unsigned NOT NULL auto_increment,
                   coid int(10) unsigned NOT NULL default '0',
                   uid int(10) unsigned NOT NULL default '0',
@@ -78,7 +78,7 @@ function cmi_install() {
                   KEY uid (uid),
                   KEY coid (coid)
                 ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE {cmi_sco} (
+       db_query("CREATE TABLE {cmi_sco} (
                   csid int(10) unsigned NOT NULL auto_increment,
                   nid int(10) unsigned NOT NULL default '0',
                   vid int(10) unsigned NOT NULL default '0',
