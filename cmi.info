@@ -1,0 +1,4 @@
+; $Id$
+name = CMI
+description = The SCORM CMI Datamodel.
+package = "LMS"
