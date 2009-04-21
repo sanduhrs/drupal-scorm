@@ -1,5 +1,5 @@
 <?php
-/* $Id$ */
+// $Id$
 
 /**
  * SCORM 2004 Run-Time Environment (RTE)
@@ -34,14 +34,19 @@ function scorm_rte_menu($may_cache) {
 function scorm_rte_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   switch ($op) {
     case 'view':
-      //TODO: Load only when a SCO is loaded
-      $scorm = array(
-        'nid' => $node->nid,
-        'path' => base_path(),
-      );
-      drupal_add_js('var scorm = '. drupal_to_js($scorm), 'inline');
-      drupal_add_js(drupal_get_path('module', 'scorm_rte') .'/scorm_rte.js');
-      drupal_add_js(drupal_get_path('module', 'scorm_rte') .'/scorm.js');
+      //TODO: Load js only when a SCO is loaded
+      //TODO: Implement hook to add js needed by other SCORM modules
+      if (arg(0) == 'node' && is_numeric(arg(1))) {
+        $data = 'API_1484_11.nid = '. drupal_to_js((integer) $node->nid);
+        drupal_add_js($data, 'inline', 'header', FALSE, FALSE);
+        $data = 'API_1484_11.basepath = '. drupal_to_js(base_path());
+        drupal_add_js($data, 'inline', 'header', FALSE, FALSE);
+
+        drupal_add_js(drupal_get_path('module', 'scorm_rte') .'/json2.js');
+        drupal_add_js(drupal_get_path('module', 'scorm_rte') .'/scorm_rte.js');
+        drupal_add_js(drupal_get_path('module', 'scorm_rte') .'/scorm.js');
+        drupal_add_js(drupal_get_path('module', 'scorm_rte') .'/cmi.js');
+      }
       break;
   }
 }
@@ -63,6 +68,8 @@ function scorm_rte_callback($nid, $arg, $XMLHttpRequest = TRUE) {
   if ($nid) {
     $params['nid'] = $nid;
   }
+
+  //TODO: load session-, attempt-id
 
   if ($arg) {
     $params['arg'] = $arg;
@@ -112,7 +119,7 @@ function scorm_rte_callback($nid, $arg, $XMLHttpRequest = TRUE) {
       scorm_rte_load_datamodel($params);
       break;
     default:
-      drupal_not_found($params);
+      drupal_not_found();
       break;
   }
 }
@@ -125,18 +132,18 @@ function scorm_rte_callback($nid, $arg, $XMLHttpRequest = TRUE) {
  *   (“”) – empty characterstring. An empty characterstring shall be passed as a
  *   parameter.
  * @return
- *   Return Value: The function can return one of two values. The return value 
- *   shall be represented as a characterstring. The quotes (“”) are not part of 
- *   the characterstring returned, they are used purely to delineate the values 
+ *   Return Value: The function can return one of two values. The return value
+ *   shall be represented as a characterstring. The quotes (“”) are not part of
+ *   the characterstring returned, they are used purely to delineate the values
  *   returned.
  *     •  “true” – The characterstring “true” shall be returned if communication
  *        session initialization, as determined by the LMS, was successful.
- *     •  “false” – The characterstring “false” shall be returned if 
- *        communication session initialization, as determined by the LMS, was 
- *        unsuccessful. The API Instance shall set the error code to a value 
- *        specific to the error encountered. The SCO may call GetLastError() to 
- *        determine the type of error. More detailed information pertaining to 
- *        the error may be provided by the LMS through the GetDiagnostic() 
+ *     •  “false” – The characterstring “false” shall be returned if
+ *        communication session initialization, as determined by the LMS, was
+ *        unsuccessful. The API Instance shall set the error code to a value
+ *        specific to the error encountered. The SCO may call GetLastError() to
+ *        determine the type of error. More detailed information pertaining to
+ *        the error may be provided by the LMS through the GetDiagnostic()
  *        function.
  */
 function scorm_rte_initialize($params = array()) {
@@ -151,6 +158,7 @@ function scorm_rte_initialize($params = array()) {
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
@@ -158,26 +166,26 @@ function scorm_rte_initialize($params = array()) {
 
 /**
  * The function is used to terminate the communication session. It is used by
- * the SCO when the SCO has determined that it no longer needs to communicate 
+ * the SCO when the SCO has determined that it no longer needs to communicate
  * with the LMS.
  *
- * The Terminate() function also shall cause the persistence of 
- * any data (i.e., an implicit Commit(“”) call) set by the SCO since the last 
- * successful call to Initialize(“”) or Commit(“”), whichever occurred most 
- * recently. This guarantees to the SCO that all data set by the SCO has been 
- * persisted by the LMS. Once the communication session has been successfully 
+ * The Terminate() function also shall cause the persistence of
+ * any data (i.e., an implicit Commit(“”) call) set by the SCO since the last
+ * successful call to Initialize(“”) or Commit(“”), whichever occurred most
+ * recently. This guarantees to the SCO that all data set by the SCO has been
+ * persisted by the LMS. Once the communication session has been successfully
  * terminated, the SCO is only permitted to call the Support Methods.
  *
  * @param parameter
  *   (“”) – empty characterstring. An empty characterstring shall be passed as a
  *   parameter.
  * @return
- *   Return Value: The method can return one of two values. The return value 
- *   shall be represented as a characterstring. The quotes (“”) are not part of 
- *   the characterstring returned, they are used purely to delineate the values 
+ *   Return Value: The method can return one of two values. The return value
+ *   shall be represented as a characterstring. The quotes (“”) are not part of
+ *   the characterstring returned, they are used purely to delineate the values
  *   returned.
- *     •  “true” – The characterstring “true” shall be returned if termination 
- *        of the communication session, as determined by the LMS, was 
+ *     •  “true” – The characterstring “true” shall be returned if termination
+ *        of the communication session, as determined by the LMS, was
  *        successful.
  *     •  “false” – The characterstring “false” shall be returned if termination
  *        of the communication session, as determined by the LMS, was unsuccessful. The API
@@ -189,7 +197,7 @@ function scorm_rte_initialize($params = array()) {
 function scorm_rte_terminate($params = array()) {
 
   $output = array();
-  $output = module_invoke_all('scorm_rte_initialize', $params);
+  $output = module_invoke_all('scorm_rte_terminate', $params);
 
   //TODO: return false in case any module returned false
   // and set error
@@ -198,6 +206,7 @@ function scorm_rte_terminate($params = array()) {
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
@@ -238,6 +247,7 @@ function scorm_rte_get_value($params = array()) {
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
@@ -283,6 +293,7 @@ function scorm_rte_set_value($params = array()) {
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
@@ -321,11 +332,15 @@ function scorm_rte_set_value($params = array()) {
  *        GetDiagnostic() function.
  */
 function scorm_rte_commit($params = array()) {
-  $output = TRUE;//DEBUG
+  $output = array();
+  $session = json_decode($_POST['session'], TRUE);
+
+  $output = module_invoke_all('scorm_rte_commit', $params, $session);
 
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
@@ -338,9 +353,16 @@ function scorm_rte_set_error($params = array()) {
   if ($params['XMLHttpRequest']) {
     unset($params['XMLHttpRequest']);
   }
-  
-  // Log error to watchdog
-  watchdog('Scorm', ($params['error_code'] ? $params['error_code'] : t('n.a.')) .': '. ($params['error_code'] ? scorm_rte_get_error_string($params) : t('Undefined error')) .' ('. print_r($params, 1) .').', WATCHDOG_ERROR);
+
+  if (isset($_GET['parameter'])) {
+    $params['error_code'] = $_GET['parameter'];
+  }
+
+  // Dont't log 0 => 'no error'
+  if ((is_numeric($params['error_code']) && $params['error_code'] > 0)) {
+    // Log error to watchdog
+    watchdog('Scorm', (isset($params['error_code']) ? $params['error_code'] : t('n.a.')) .': '. (isset($params['error_code']) ? scorm_rte_get_error_string($params) : t('Undefined error')), WATCHDOG_ERROR);
+  }
 }
 
 /**
@@ -361,11 +383,13 @@ function scorm_rte_set_error($params = array()) {
  *   error encountered.
  */
 function scorm_rte_get_last_error($params = array()) {
+  //TODO: erroring
   $output = 'get_last_error';//DEBUG
 
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
@@ -402,7 +426,7 @@ function scorm_rte_get_last_error($params = array()) {
  */
 function scorm_rte_get_error_string($params = array()) {
   $error_code = $params['error_code'];
-  
+
   $error_codes = array(
     0 => t('No error'),
     // General Error Codes
@@ -444,15 +468,16 @@ function scorm_rte_get_error_string($params = array()) {
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
 }
 
 /**
- * The GetDiagnostic() function exists for LMS specific use. It allows the LMS 
- * to define additional diagnostic information through the API Instance. This 
- * call has no effect on the current error state; it simply returns the 
+ * The GetDiagnostic() function exists for LMS specific use. It allows the LMS
+ * to define additional diagnostic information through the API Instance. This
+ * call has no effect on the current error state; it simply returns the
  * requested information.
  *
  * @param
@@ -461,23 +486,23 @@ function scorm_rte_get_error_string($params = array()) {
  *   parameter may be an error code, but is not limited to just error codes.
  * @return
  *   The API Instance shall return a characterstring representing the
- *   diagnostic information. The maximum length of the characterstring returned 
- *   shall be 255 characters. If the parameter is unknown by the LMS, an empty 
+ *   diagnostic information. The maximum length of the characterstring returned
+ *   shall be 255 characters. If the parameter is unknown by the LMS, an empty
  *   characterstring (“”) shall be returned.
- *   If the parameter passed into the GetDiagnostic() function is an empty 
- *   characterstring (“”), then it is recommended that the function return a 
- *   characterstring representing diagnostic information about the last error 
+ *   If the parameter passed into the GetDiagnostic() function is an empty
+ *   characterstring (“”), then it is recommended that the function return a
+ *   characterstring representing diagnostic information about the last error
  *   encountered.
  */
 function scorm_rte_get_diagnostic($params = array()) {
   $error_strings  = scorm_rte_get_error_string();
   $error_code     = $params['error_code'];
-  
+
   // Return error description in case an error code is given
   if ($error_code AND in_array($error_code, $error_strings) AND $error_code != '') {
     $output = t('!error_code: !error_string', array('!error_code' => $error_code, '!error_string' => $error_strings[$error_code]));
   }
-  // Return error description of latest error in case empty characterstring is 
+  // Return error description of latest error in case empty characterstring is
   // given
   else if($error_code === '') {
     $last_error = scorm_rte_get_last_error($params);
@@ -487,11 +512,11 @@ function scorm_rte_get_diagnostic($params = array()) {
   else {
     $output = '';
   }
-  
 
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
@@ -503,40 +528,13 @@ function scorm_rte_get_diagnostic($params = array()) {
 function scorm_rte_load_datamodel($params = array()) {
   $output = array();
   $output = module_invoke_all('scorm_rte_load_datamodel', $params);
-  
-#  drupal_set_message('<pre>'. print_r($output, 1) .'</pre>');
-  
+
   if ($params['XMLHttpRequest']) {
     drupal_set_header('Content-Type: application/x-javascript');
     print drupal_to_js($output);
+    die();
   }
 
   return $output;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

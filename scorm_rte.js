@@ -1,4 +1,4 @@
-/* $Id$ */
+// $Id$
 
 /**
  * SCORM 2004 Run-Time Environment (RTE)
@@ -10,13 +10,12 @@
 /**
  * Initializing the API object
  */
-API_1484_11 = new Object();
+API_1484_11 = {};
 
 /**
  * Debug mode
  */
-API_1484_11.debug = true; // Boolean
-API_1484_11.dbox  = null;
+API_1484_11.debug = true;
 
 /**
  * Defining the API version
@@ -31,24 +30,24 @@ API_1484_11.error = 0; // No error
 /**
  * Conceptual communication states
  */
-var API_STATE_0 = 'Not Initialized';
-var API_STATE_1 = 'Running';
-var API_STATE_2 = 'Terminated';
+API_1484_11.API_STATE_0 = 'Not Initialized';
+API_1484_11.API_STATE_1 = 'Running';
+API_1484_11.API_STATE_2 = 'Terminated';
 
 /**
  * Set default conceptual communication state
  */
-API_1484_11.state = API_STATE_0;
+API_1484_11.state = API_1484_11.API_STATE_0;
 
 /**
  * Error codes
  */
-API_1484_11.error_strings = new Array();
+API_1484_11.error_strings = [];
 
 /**
- * Session cache
+ * Session data
  */
-API_1484_11.session = new Array();
+API_1484_11.session = [];
 
 /**
  * The function is used to initiate the communication session. It allows the LMS
@@ -72,44 +71,44 @@ API_1484_11.session = new Array();
  *        the error may be provided by the LMS through the GetDiagnostic() 
  *        function.
  */
-API_1484_11.Initialize = function(parameter) {
-  var dbox = this.dbox;
-  var debug = this.debug;
+API_1484_11.Initialize = function (parameter) {
+  this.Watchdog('RTE: Initialize');//DEBUG
 
-  if (debug && dbox) dbox.append('<div>Initialize</div>');//DEBUG
-
-  // Already initialized
-  if (this.state == API_STATE_1) {
+  if (this.state === this.API_STATE_1) {
+    // Already initialized
     this.SetError(103);
     return false;
   }
 
-  // Set Conceptual communication state to running
-  this.SetState(API_STATE_1);
-
   // Inform LMS of initialization
   $.ajax({
-    url: scorm['path']+'index.php?q=node/'+ scorm['nid'] +'/scorm/initialize',
-    data: 'parameter='+parameter,
+    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/initialize',
+    data: 'parameter=' + parameter,
     dataType: 'json',
-    success: function(data, textStatus){
-      if (debug && dbox) dbox.append('<div>Initialize return: '+ textStatus +' ('+ data +')</div>');//DEBUG
+    success: function (data, textStatus) {
+      API_1484_11.Watchdog('RTE: Initialize return: ' + textStatus + ' (' + data + ')');//DEBUG
 
       // Set error in case LMS side fails to initialize
       if (data === false) {
-        this.SetError(102);
+        // General Initialization Failure
+        API_1484_11.SetError(102);
       }
     },
-    error: function(XMLHttpRequest, textStatus, errorThrown){
-      if (debug && dbox) dbox.append('<div>Initialize error:'+ textStatus +':'+ errorThrown +'</div>');//DEBUG
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+      API_1484_11.Watchdog('RTE: Initialize error:' + textStatus + ':' + errorThrown);//DEBUG
 
-      // Set error in case communication fails
-      this.SetError(1000);
-    },
+      // General communication failure (Ajax)
+      API_1484_11.SetError(1000);
+    }
   });
   
+  // Set Conceptual communication state to running
+  this.SetState(this.API_STATE_1);
+  // No error
+  this.SetError(0); //XXX
+  
   return true;
-}
+};
 
 /**
  * The function is used to terminate the communication session. It is used by 
@@ -139,52 +138,52 @@ API_1484_11.Initialize = function(parameter) {
  *        the error may be provided by the LMS through the GetDiagnostic() 
  *        function.
  */
-API_1484_11.Terminate = function(parameter) {
-  var dbox = this.dbox;
-  var debug = this.debug;
-  
-  if (debug && dbox) dbox.append('<div>Terminate</div>');//DEBUG
+API_1484_11.Terminate = function (parameter) {
+  this.Watchdog('RTE: Terminate');//DEBUG
 
-  // Not yet initialized
-  if (this.state == API_STATE_0) {
+  if (this.state === this.API_STATE_0) {
+    // Termination Before Initialization
     this.SetError(112);
     return false;
   }
-  // Already terminated
-  else if (this.state == API_STATE_2) {
+  else if (this.state === this.API_STATE_2) {
+    // Termination After Termination
     this.SetError(113);
     return false;
   }
 
-  // Inform the LMS of termination
-  $.ajax({
-    url: scorm['path']+'index.php?q=node/'+ scorm['nid'] +'/scorm/terminate',
-    dataType: 'json',
-    data: 'parameter='+parameter,
-    success: function(data, textStatus){
-      if (debug && dbox) dbox.append('<div>Terminate return:'+ textStatus +' ('+ data +')</div>');//DEBUG
-      
-      // Set error in case LMS side fails to terminate
-      if (data === false) {
-        this.SetError(111);
-      }
-    },
-    error: function(XMLHttpRequest, textStatus, errorThrown){
-      if (debug && dbox) dbox.append('<div>Terminate error:'+ textStatus +':'+ errorThrown +'</div>');//DEBUG
-      
-      // Set error in case communication fails
-      this.SetError(1000);
-    }
-  });
-
   // Commit data to persistent data store
   this.Commit('');
 
+  // Inform the LMS of termination
+  $.ajax({
+    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/terminate',
+    dataType: 'json',
+    data: 'parameter=' + parameter,
+    success: function (data, textStatus) {
+      API_1484_11.Watchdog('RTE: Terminate return:' + textStatus + ' (' + data + ')');//DEBUG
+      
+      // Set error in case LMS side fails to terminate
+      if (data === false) {
+        // General Termination Failure
+        API_1484_11.SetError(111);
+      }
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+      API_1484_11.Watchdog('RTE: Terminate error:' + textStatus + ':' + errorThrown);//DEBUG
+      
+      // General communication failure (Ajax)
+      API_1484_11.SetError(1000);
+    }
+  });
+
   // Set Conceptual communication state
-  this.SetState(API_STATE_2);
+  this.SetState(this.API_STATE_2);
+  // No error
+  this.SetError(0); //XXX
 
   return true;//DEBUG
-}
+};
 
 /**
  * The function requests information from an LMS. It permits the SCO to request 
@@ -204,62 +203,39 @@ API_1484_11.Terminate = function(parameter) {
  *       detailed information pertaining to the error may be provided by the LMS
  *       through the GetDiagnostic() function.
  */
-API_1484_11.GetValue = function(name) {
-  var data  = new Array();
-  var dbox  = this.dbox;
-  var debug = this.debug;
+API_1484_11.GetValue = function (name) {
+  var data  = '', data_model = this.UcFirst(name.split('.').shift());
 
-  if (debug && dbox) this.dbox.append('<div>GetValue '+ name +'</div>');//DEBUG
+  this.Watchdog('RTE: GetValue ' + name);//DEBUG
 
-  // Not yet initialized
-  if (this.state == API_STATE_0) {
+  if (this.state === this.API_STATE_0) {
+    // Retrieve Data Before Initialization
     this.SetError(122);
     return '';
   }
-  // Already terminated
-  else if (this.state == API_STATE_2) {
+  else if (this.state === this.API_STATE_2) {
+    // Retrieve Data After Termination
     this.SetError(123);
     return '';
   }
 
   // Get value from cache
-  data = this.ExtractValue(name);
-  
-  // Check if requested data is available
-  if (typeof data != 'undefined') {
-    // Data model element is implemented and readable
-    if (data['implemented'] && data['read']) {
-      if (debug && dbox) this.dbox.append('<div>GetValue return: '+ data['value'] +'</div>');//DEBUG
-      // No error
-      this.SetError(0);
-      return data['value'];
-    }
-    // Data model element is implemented but not readable/writable
-    if (data['implemented'] && !data['read'] && !data['write']) {
-      if (debug && dbox) this.dbox.append('<div>GetValue return: '+ data['value'] +'</div>');//DEBUG
-      // General Argument Error
-      this.SetError(201);
-      return '';
-    }
-    // Data model element is implemented and write only
-    if (data['implemented'] && !data['read']) {
-      if (debug && dbox) this.dbox.append('<div>GetValue return: '+ data['value'] +'</div>');//DEBUG
-      // Data Model Element Is Write Only
-      this.SetError(405);
-      return '';
-    }
-    // Data model element is not implemented
-    else if (!data['implemented']) {
-      // Data model unimplemented
-      this.SetError(402);
-      return '';
-    }
+  if (typeof this[data_model].GetValue === 'function') {
+    // Invoke the method if it exists
+    data = this[data_model].GetValue(name);
+    return data;
+  }
+  else {
+    // Data Model Dependency Not Established
+    this.SetError(408);
+    return '';
   }
   
-  // Data model undefined
-  this.SetError(401);
-  return '';
-}
+  // Something went wrong, when we arrive here
+  // General Get Failure
+  this.SetError(301);
+  return false;
+};
 
 /**
  * The method is used to request the transfer to the LMS of the value of
@@ -287,28 +263,39 @@ API_1484_11.GetValue = function(name) {
  *      type of error. More detailed information pertaining to the error may be 
  *      provided by the LMS through the GetDiagnostic() function.
  */
-API_1484_11.SetValue = function(name, value) {
-  var dbox = this.dbox;
-  var debug = this.debug;
+API_1484_11.SetValue = function (name, value) {
+  var data_model = this.UcFirst(name.split('.').shift());
 
-  if (debug && dbox) dbox.append('<div>SetValue '+ name +':'+ value +'</div>');//DEBUG
-
-  // Not yet initialized
-  if (this.state == API_STATE_0) {
+  this.Watchdog('RTE: SetValue ' + name + ':' + value);//DEBUG
+  
+  if (this.state === this.API_STATE_0) {
+    // Store Data Before Initialization
     this.SetError(132);
     return false;
   }
-  // Already terminated
-  else if (this.state == API_STATE_2) {
+  else if (this.state === this.API_STATE_2) {
+    // Store Data After Termination
     this.SetError(133);
     return false;
   }
 
-  //TODO: Save value to cache
-  //TODO: Save value to LMS
+  // Save value to cache
+  if (typeof this[data_model].SetValue === 'function') {
+    // Invoke the method if it exists
+    data = this[data_model].SetValue(name, value);
+    return data;
+  }
+  else {
+    // Data Model Dependency Not Established
+    this.SetError(408);
+    return '';
+  }
 
-   return true;//DEBUG
-}
+  // Something went wrong, when we arrive here
+  // General Set Failure
+  this.set.error(352);
+  return false;
+};
 
 /**
  * The method requests forwarding to the persistent data store any data from the
@@ -345,28 +332,41 @@ API_1484_11.SetValue = function(name, value) {
  *        error. More detailed information pertaining to the error may be 
  *        provided by the LMS through the GetDiagnostic() function.
  */
-API_1484_11.Commit = function(parameter) {
-  var debug = this.debug;
-  var dbox = this.dbox;
+API_1484_11.Commit = function (parameter) {
+  // Encode the session data to JSON
+  var session = JSON.stringify(this.session);
+  
+  this.Watchdog('RTE: Commit: ' + session);//DEBUG
 
-  if (debug && dbox) dbox.append('<div>Commit</div>');//DEBUG
-
-  if (this.state == API_STATE_0) {
+  if (this.state === this.API_STATE_0) {
+    // Commit Before Initialization
     this.SetError(142);
     return false;
   }
-  else if (this.state == API_STATE_2) {
+  else if (this.state === this.API_STATE_2) {
+    // Commit After Termination
     this.SetError(143);
     return false;
   }
 
-  /**
-   * Theres no need to commit anything, as we cache AND commit all data when 
-   * SetValue() is called.
-   */
+  // Commit cached data
+  $.ajax({
+    type: 'POST',
+    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/commit',
+    data: {parameter: parameter, session: session},
+    success: function (data, textStatus) {
+      API_1484_11.Watchdog('RTE: Commit: ' + textStatus + ' (' + data + ')');//DEBUG
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+      API_1484_11.Watchdog('RTE: Commit error:' + textStatus + ':' + errorThrown);//DEBUG
 
+      // General communication failure (Ajax)
+      API_1484_11.SetError(1000);
+    }
+  });
+  
   return true;
-}
+};
 
 /**
  * This method requests the error code for the current error state of the API
@@ -385,14 +385,11 @@ API_1484_11.Commit = function(parameter) {
  *   (convertible to an integer in the range from 0 to 65536 inclusive) 
  *   representing the error code of the last error encountered.
  */
-API_1484_11.GetLastError = function() {
-  var dbox = this.dbox;
-  var debug = this.debug;
-
-  if (debug && dbox) dbox.append('<div>GetLastError ('+ this.error +') </div>');//DEBUG
-
+API_1484_11.GetLastError = function () {
+  this.Watchdog('RTE: GetLastError (' + this.error + ')');//DEBUG
+  
   return this.error;
-}
+};
 
 /**
  * The GetErrorString() function can be used to retrieve a textual description 
@@ -421,14 +418,11 @@ API_1484_11.GetLastError = function() {
  *         characterstring ("") shall be returned. This is the only time that an
  *         empty characterstring shall be returned.
  */
-API_1484_11.GetErrorString = function(error_code) {
-  var dbox = this.dbox;
-  var debug = this.debug;
+API_1484_11.GetErrorString = function (error_code) {
+  this.Watchdog('RTE: GetErrorString (' + error_code + '): ' + this.error_strings[error_code]);//DEBUG
 
-  if (debug && dbox) dbox.append('<div>GetErrorString ('+ error_code +'): '+ this.error_strings[error_code] +'</div>');//DEBUG
-
-  return this.error_strings[error_code] ? this.error_strings[error_code] : '';//DEBUG
-}
+  return this.error_strings[error_code] ? this.error_strings[error_code] : '';
+};
 
 /**
  * The GetDiagnostic() function exists for LMS specific use. It allows the LMS 
@@ -450,31 +444,29 @@ API_1484_11.GetErrorString = function(error_code) {
  *   characterstring representing diagnostic information about the last error 
  *   encountered.
  */
-API_1484_11.GetDiagnostic = function(parameter) {
-  var debug = this.debug;
-  var dbox = this.dbox;
+API_1484_11.GetDiagnostic = function (parameter) {
   var output = '';
   
-  if (debug && dbox) dbox.append('<div>GetDiagnostic: ('+ parameter +')</div>');//DEBUG
+  this.Watchdog('RTE: GetDiagnostic: (' + parameter + ')');//DEBUG
 
   // Return error description in case an error code is given
   if (parameter && this.error_strings[parameter] && parameter.length > 0) {
-    output = parameter +': '+ this.error_strings[parameter];
-    if (debug && dbox) dbox.append('<div>GetDiagnostic return: ('+ output +') (Error string requested error)</div>');//DEBUG
+    output = parameter + ': ' + this.error_strings[parameter];
+    this.Watchdog('RTE: GetDiagnostic return: (' + output + ') (Error string requested error)');//DEBUG
   }
   // Return error description of last error
-  else if(parameter === '') {
-    output = this.error +': '+ this.error_strings[parameter];
-    if (debug && dbox) dbox.append('<div>GetDiagnostic return: ('+ output +') (Error string last error)</div>');//DEBUG
+  else if (parameter === '') {
+    output = this.error + ': ' + this.error_strings[parameter];
+    this.Watchdog('RTE: GetDiagnostic return: (' + output + ') (Error string last error)');//DEBUG
   }
   // Unknown - return empty string
   else {
     // Nothing to do
-    if (debug && dbox) dbox.append('<div>GetDiagnostic return: ('+ output +') (Empty string)</div>');//DEBUG
+    this.Watchdog('RTE: GetDiagnostic return: (' + output + ') (Empty string)');//DEBUG
   }
 
   return output;
-}
+};
 
 /**
  * Helper functions
@@ -483,116 +475,134 @@ API_1484_11.GetDiagnostic = function(parameter) {
 /**
  * Set error
  */
-API_1484_11.SetError = function(parameter) {
-  var debug = this.debug;
-  var dbox = this.dbox;
-  if (debug && dbox) dbox.append('<div>Set Error ('+ parameter +')</div>');//DEBUG
+API_1484_11.SetError = function (parameter) {
+  this.Watchdog('RTE: Set Error (' + parameter + ')');//DEBUG
   
   // Set error
   this.error = parameter;
 
-  // Inform LMS of the error
-  $.ajax({
-    url: scorm['path']+'index.php?q=node/'+ scorm['nid'] +'/scorm/set_error',
-    data: 'parameter='+parameter,
-    success: function(data, textStatus){
-      if (debug && dbox) dbox.append('<div>Set error: '+ textStatus +' ('+ data +')</div>');//DEBUG
-    },
-    error: function(XMLHttpRequest, textStatus, errorThrown){
-      if (debug && dbox) dbox.append('<div>Set error error:'+ textStatus +':'+ errorThrown +'</div>');//DEBUG
-
-      // Set error in case communication fails
-      this.SetError(1000);
-    },
-  });
+//  // Inform LMS of the error
+//  $.ajax({
+//    url: location.href + '/scorm/set_error',
+//    data: 'parameter=' + parameter,
+//    success: function (data, textStatus) {
+//      API_1484_11.Watchdog('Set error: ' + textStatus + ' (' + data + ')');//DEBUG
+//    },
+//    error: function (XMLHttpRequest, textStatus, errorThrown) {
+//      API_1484_11.Watchdog('RTE: Set error error:' + textStatus + ':' + errorThrown);//DEBUG
+//
+//      // General communication failure (Ajax)
+//      API_1484_11.SetError(1000);
+//    }
+//  });
 
   return true;
-}
+};
+
+/* Helper functions */
 
 /**
  * Set conceptual communication state
  */
-API_1484_11.SetState = function(parameter) {
-  var debug = this.debug;
-  var dbox = this.dbox;
-  if (debug && dbox) dbox.append('<div>Set state: '+ parameter +'</div>');//DEBUG
+API_1484_11.SetState = function (parameter) {
+  this.Watchdog('RTE: Set state: ' + parameter);//DEBUG
   
   this.state = parameter;
-  if (debug && dbox) dbox.append('<div>State set to: '+ this.state +'</div>');//DEBUG
+  
+  this.Watchdog('RTE: State set to: ' + this.state);//DEBUG
 
   return true;
-}
+};
 
 /**
  * Load error strings
  */
-API_1484_11.LoadErrorStrings = function() {
-  var debug = this.debug;
-  var dbox = this.dbox;
-
-  if (debug && dbox) dbox.append('<div>Load Error Strings</div>');//DEBUG
+API_1484_11.LoadErrorStrings = function () {
+  this.Watchdog('RTE: Load Error Strings');//DEBUG
         
   // Load error strings
   $.ajax({
-    url: scorm['path']+'index.php?q=node/'+ scorm['nid'] +'/scorm/get_error_string',
+    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/get_error_string',
     dataType: 'json',
-    success: function(data, textStatus) {
-      if (debug && dbox) dbox.append('<div>Load Error Strings return: '+ textStatus +' ('+ data +')</div>');//DEBUG
+    success: function (data, textStatus) {
+      API_1484_11.Watchdog('RTE: Load Error Strings return: ' + textStatus + ' (' + data + ')');//DEBUG
       
-      // Save error strings
+      // Cache error strings
       API_1484_11.error_strings = data;
-      
     },
-    error: function(XMLHttpRequest, textStatus, errorThrown){
-      if (debug && dbox) dbox.append('<div>Load Error Strings error: '+ textStatus +':'+ errorThrown +'</div>');//DEBUG
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+      API_1484_11.Watchdog('RTE: Load Error Strings error: ' + textStatus + ':' + errorThrown);//DEBUG
       
-      // Set error in case communication fails
-      this.SetError(1000);
-    },
+      // General communication failure (Ajax)
+      API_1484_11.SetError(1000);
+    }
   });
-}
+};
 
 /**
  * Load data model
  */
-API_1484_11.LoadDataModel = function(parameter) {
-  var debug = this.debug;
-  var dbox = this.dbox;
-
-  if (debug && dbox) dbox.append('<div>Load Data</div>');//DEBUG
+API_1484_11.LoadDataModel = function (parameter) {
+  this.Watchdog('RTE: Load Data');//DEBUG
 
   // Load error strings
   $.ajax({
-    url: scorm['path']+'index.php?q=node/'+ scorm['nid'] +'/scorm/load_datamodel',
+    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/load_datamodel',
     dataType: 'json',
-    data: 'parameter='+parameter,
-    success: function(data, textStatus){
-      if (debug && dbox) dbox.append('<div>Load Data return: '+ textStatus +' ('+ data +')</div>');//DEBUG
+    data: 'parameter=' + parameter,
+    success: function (data, textStatus) {
+      API_1484_11.Watchdog('RTE: Load Data return: ' + textStatus + ' (' + data + ')');//DEBUG
       
-      // Save data to cache
+      // Cache session data
       API_1484_11.session = data;
     },
-    error: function(XMLHttpRequest, textStatus, errorThrown){
-      if (debug && dbox) dbox.append('<div>Load Data error: '+ textStatus +':'+ errorThrown +'</div>');//DEBUG
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+      API_1484_11.Watchdog('RTE: Load Data error: ' + textStatus + ':' + errorThrown);//DEBUG
       
-      // Set error in case communication fails
-      this.SetError(1000);
-    },
+      // General communication failure (Ajax)
+      API_1484_11.SetError(1000);
+    }
   });
-}
+};
 
 /**
- * Extract data from data model
+ * Change first character to uppercase
  */
-API_1484_11.ExtractValue = function(name) {
-  var data = this.session;
-  var keys = name.split('.');
+API_1484_11.UcFirst = function (str) {
+  var f = str.charAt(0).toUpperCase();
+  return f + str.substr(1, str.length - 1);
+};
 
-  for (var i=0;i<keys.length;i++) {
-    // Reduce to the needed
-    data = data[keys[i]];
+/**
+ * Find key in array
+ */
+API_1484_11.InArray = function (needle, haystack) {
+  var found = false, key;
+
+  for (key in haystack) {
+    if (haystack[key] === needle) {
+      found = true;
+      break;
+    }
   }
-  
-  return data;
-}
+  return found;
+};
 
+/**
+ * Debugging
+ */
+API_1484_11.Watchdog = function (message) {
+  var debug = this.debug, dbox = $('#API_1484_11');
+  
+  if (debug) {
+    if (typeof window.console === 'object') {
+      console.debug(message);
+    }
+    else if (dbox) {
+      dbox.append('<div>' + message + '</div>');//DEBUG
+    }
+    else {
+      alert(message);
+    }
+  }
+};

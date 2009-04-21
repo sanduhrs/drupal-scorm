@@ -30,3 +30,7 @@ But if you did or found other tools worth sharing, please post an issue [3] .
 [1] http://audiens.de/node/277
 [2] http://www.ostyn.com/resdownloads.htm
 [3] http://drupal.org/node/add/project-issue/scorm
+
+_________________________________________________________________________________
+
+Note: Checked js with http://www.jslint.com/
