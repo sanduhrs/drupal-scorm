@@ -21,7 +21,7 @@ function cmi_install() {
                   comment varchar(250) default NULL,
                   location varchar(250) default NULL,
                   timestamp int(11) default NULL,
-                  KEY csid ('csid')
+                  KEY csid (csid)
                 ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_interactions} (
                     ciid int(11) NOT NULL,
@@ -34,18 +34,18 @@ function cmi_install() {
                     result text,
                     latency varchar(15) NOT NULL default 'PT0H0M0S',
                     description varchar(250) default NULL,
-                    PRIMARY KEY ('ciid')
+                    PRIMARY KEY (ciid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_interactions_correct_responses} (
                     cirid int(11) NOT NULL,
                     ciid int(11) NOT NULL,
                     pattern text,
-                    PRIMARY KEY ('cirid')
+                    PRIMARY KEY (cirid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_interactions_objectives} (
                     ciid int(11) NOT NULL,
                     id text,
-                    PRIMARY KEY ('ciid')
+                    PRIMARY KEY (ciid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_learner} (
                     uid int(11) NOT NULL,
@@ -55,7 +55,7 @@ function cmi_install() {
                     delivery_speed double(10,7) default NULL,
                     audio_captioning int(10) default NULL,
                     mode varchar(10) default NULL,
-                    PRIMARY KEY ('uid')
+                    PRIMARY KEY (uid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_learner_attempt} (
                     claid int(11) unsigned NOT NULL auto_increment,
@@ -67,7 +67,7 @@ function cmi_install() {
                     success_status varchar(10) default NULL,
                     suspend_data text,
                     total_time varchar(15) NOT NULL default 'PT0H0M0S',
-                    PRIMARY KEY  ('claid')
+                    PRIMARY KEY  (claid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_learner_session} (
                     clsid int(11) NOT NULL auto_increment,
@@ -75,7 +75,7 @@ function cmi_install() {
                     entry varchar(10) default NULL,
                     exit_ varchar(10) default NULL,
                     session_time varchar(15) NOT NULL default 'PT0H0M0S',
-                    PRIMARY KEY ('clsid')
+                    PRIMARY KEY (clsid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_objectives} (
                     coid int(11) NOT NULL,
@@ -85,7 +85,7 @@ function cmi_install() {
                     completion_status varchar(15) default NULL,
                     progress_measure double(10,7) default NULL,
                     description varchar(250) default NULL,
-                    PRIMARY KEY ('coid')
+                    PRIMARY KEY (coid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_objectives_score} (
                     coid int(11) NOT NULL,
@@ -93,7 +93,7 @@ function cmi_install() {
                     raw double(10,7) default NULL,
                     min double(10,7) default NULL,
                     max double(10,7) default NULL,
-                    PRIMARY KEY ('coid')
+                    PRIMARY KEY (coid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_sco} (
                     csid int(11) NOT NULL auto_increment,
@@ -103,7 +103,7 @@ function cmi_install() {
                     max_time_allowed varchar(15) NOT NULL default 'PT0H0M0S',
                     scaled_passing_score double(10,7) default NULL,
                     time_limit_action varchar(20) default NULL,
-                    PRIMARY KEY ('csid')
+                    PRIMARY KEY (csid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
 		db_query("CREATE TABLE {cmi_score} (
                     cscid int(11) NOT NULL auto_increment,
@@ -112,7 +112,7 @@ function cmi_install() {
                     raw double(10,7) default NULL,
                     max double(10,7) default NULL,
                     min double(10,7) default NULL,
-                    PRIMARY KEY ('cscid')
+                    PRIMARY KEY (cscid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
        break;
      case 'pgsql':
