@@ -23,7 +23,7 @@ function cmi_install() {
                   timestamp int(11) default NULL,
                   KEY csid (csid)
                 ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_interactions} (
+       db_query("CREATE TABLE {cmi_interactions} (
                     ciid int(11) NOT NULL,
                     clsid int(11) NOT NULL,
                     id text,
@@ -36,18 +36,18 @@ function cmi_install() {
                     description varchar(250) default NULL,
                     PRIMARY KEY (ciid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_interactions_correct_responses} (
+       db_query("CREATE TABLE {cmi_interactions_correct_responses} (
                     cirid int(11) NOT NULL,
                     ciid int(11) NOT NULL,
                     pattern text,
                     PRIMARY KEY (cirid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_interactions_objectives} (
+       db_query("CREATE TABLE {cmi_interactions_objectives} (
                     ciid int(11) NOT NULL,
                     id text,
                     PRIMARY KEY (ciid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_learner} (
+       db_query("CREATE TABLE {cmi_learner} (
                     uid int(11) NOT NULL,
                     credit varchar(10) default NULL,
                     audio_level double(10,7) default NULL,
@@ -57,7 +57,7 @@ function cmi_install() {
                     mode varchar(10) default NULL,
                     PRIMARY KEY (uid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_learner_attempt} (
+       db_query("CREATE TABLE {cmi_learner_attempt} (
                     claid int(11) unsigned NOT NULL auto_increment,
                     csid int(11) NOT NULL,
                     uid int(11) NOT NULL,
@@ -69,7 +69,7 @@ function cmi_install() {
                     total_time varchar(15) NOT NULL default 'PT0H0M0S',
                     PRIMARY KEY  (claid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_learner_session} (
+       db_query("CREATE TABLE {cmi_learner_session} (
                     clsid int(11) NOT NULL auto_increment,
                     claid int(11) NOT NULL,
                     entry varchar(10) default NULL,
@@ -77,7 +77,7 @@ function cmi_install() {
                     session_time varchar(15) NOT NULL default 'PT0H0M0S',
                     PRIMARY KEY (clsid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_objectives} (
+       db_query("CREATE TABLE {cmi_objectives} (
                     coid int(11) NOT NULL,
                     ciid int(11) default NULL,
                     id text,
@@ -87,7 +87,7 @@ function cmi_install() {
                     description varchar(250) default NULL,
                     PRIMARY KEY (coid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_objectives_score} (
+       db_query("CREATE TABLE {cmi_objectives_score} (
                     coid int(11) NOT NULL,
                     scaled double(10,7) default NULL,
                     raw double(10,7) default NULL,
@@ -95,17 +95,17 @@ function cmi_install() {
                     max double(10,7) default NULL,
                     PRIMARY KEY (coid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_sco} (
+       db_query("CREATE TABLE {cmi_sco} (
                     csid int(11) NOT NULL auto_increment,
                     nid int(11) NOT NULL,
                     completion_threshold double(10,7) default NULL,
                     launch_data text,
-                    max_time_allowed varchar(15) NOT NULL default 'PT0H0M0S',
+                    max_time_allowed varchar(15) default NULL,
                     scaled_passing_score double(10,7) default NULL,
                     time_limit_action varchar(20) default NULL,
                     PRIMARY KEY (csid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-		db_query("CREATE TABLE {cmi_score} (
+       db_query("CREATE TABLE {cmi_score} (
                     cscid int(11) NOT NULL auto_increment,
                     claid int(11) unsigned NOT NULL,
                     scaled double(10,7) default NULL,
@@ -124,14 +124,21 @@ function cmi_install() {
  * Implementation of hook_uninstall().
  */
 function cmi_uninstall() {
-   db_query('DROP TABLE {cmi_comments_from_learner}');
-   db_query('DROP TABLE {cmi_completion_status}');
-   db_query('DROP TABLE {cmi_interactions}');
-   db_query('DROP TABLE {cmi_interactions_objectives}');
-   db_query('DROP TABLE {cmi_learner}');
-   db_query('DROP TABLE {cmi_objectives}');
-   db_query('DROP TABLE {cmi_objectives_score}');
-   db_query('DROP TABLE {cmi_sco}');
-   db_query('DROP TABLE {cmi_score}');
-   db_query('DROP TABLE {cmi_sco_session}');
+  db_query('DROP TABLE {cmi_comments_from_learner}');
+  db_query('DROP TABLE {cmi_interactions}');
+  db_query('DROP TABLE {cmi_interactions_correct_responses}');
+  db_query('DROP TABLE {cmi_interactions_objectives}');
+  db_query('DROP TABLE {cmi_learner}');
+  db_query('DROP TABLE {cmi_learner_attempt}');
+  db_query('DROP TABLE {cmi_learner_session}');
+  db_query('DROP TABLE {cmi_objectives}');
+  db_query('DROP TABLE {cmi_objectives_score}');
+  db_query('DROP TABLE {cmi_sco}');
+  db_query('DROP TABLE {cmi_score}');
+  
+  $node_types = node_get_types();
+  foreach($node_types as $type => $node) {
+    variable_del('scorm_is_object_' . $type);
+    variable_del('scorm_view_mode_' . $type);
+  }
 }
