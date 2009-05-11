@@ -75,6 +75,7 @@ function cmi_install() {
                     entry varchar(10) default NULL,
                     exit_ varchar(10) default NULL,
                     session_time varchar(15) NOT NULL default 'PT0H0M0S',
+                    timestamp int(11) NOT NULL,
                     PRIMARY KEY (clsid)
                   ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
        db_query("CREATE TABLE {cmi_objectives} (
