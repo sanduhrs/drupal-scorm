@@ -1,0 +1,4 @@
+; $Id$
+name = SCORM - User Interface
+description = The SCORM user interface.
+package = "LMS"

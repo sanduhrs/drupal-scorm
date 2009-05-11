@@ -1,0 +1,4 @@
+; $Id$
+name = Reporting
+description = SCORM assessment reports.
+package = "LMS"

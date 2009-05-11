@@ -8,7 +8,9 @@
  * Stefan Auditor <stefan.auditor@erdfisch.de>
  *
  * @TODO add a nice js slider to the fields audio_level and delivery_speed,
- *       e.g. http://docs.jquery.com/UI/Slider
+ *       e.g. http://docs.jquery.com/UI/Slider  if (!$scorm_is_object = variable_get('scorm_is_object_' . $node->type, FALSE)) {
+    return;
+  }
  */
 
 /**

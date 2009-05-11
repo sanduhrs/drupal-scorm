@@ -57,5 +57,5 @@ var API_1484_11 = null;
 API_1484_11 = API_1484_11_Discovery.GetApi(); 
 
 if (API_1484_11 === null) {
-  alert('Sorry, No API instance found.');
+  $('.node').eq(0).prepend('<div class="messages error">Could not find SCORM API, SCORM functionality not available.</div>');
 }
