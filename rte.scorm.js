@@ -82,7 +82,7 @@ API_1484_11.Initialize = function (parameter) {
 
   // Inform LMS of initialization
   $.ajax({
-    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/initialize',
+    url: API_1484_11.basepath + '?q=node/' + API_1484_11.nid + '/scorm/initialize',
     data: 'parameter=' + parameter,
     dataType: 'json',
     success: function (data, textStatus) {
@@ -157,7 +157,7 @@ API_1484_11.Terminate = function (parameter) {
 
   // Inform the LMS of termination
   $.ajax({
-    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/terminate',
+    url: API_1484_11.basepath + '?q=node/' + API_1484_11.nid + '/scorm/terminate',
     dataType: 'json',
     data: 'parameter=' + parameter,
     success: function (data, textStatus) {
@@ -352,7 +352,7 @@ API_1484_11.Commit = function (parameter) {
   // Commit cached data
   $.ajax({
     type: 'POST',
-    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/commit',
+    url: API_1484_11.basepath + '?q=node/' + API_1484_11.nid + '/scorm/commit',
     data: {parameter: parameter, session: session},
     success: function (data, textStatus) {
       API_1484_11.Watchdog('RTE: Commit: ' + textStatus + ' (' + data + ')');//DEBUG
@@ -522,7 +522,7 @@ API_1484_11.LoadErrorStrings = function () {
         
   // Load error strings
   $.ajax({
-    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/get_error_string',
+    url: API_1484_11.basepath + '?q=node/' + API_1484_11.nid + '/scorm/get_error_string',
     dataType: 'json',
     success: function (data, textStatus) {
       API_1484_11.Watchdog('RTE: Load Error Strings return: ' + textStatus + ' (' + data + ')');//DEBUG
@@ -547,7 +547,7 @@ API_1484_11.LoadDataModel = function (parameter) {
 
   // Load error strings
   $.ajax({
-    url: API_1484_11.basepath + 'node/' + API_1484_11.nid + '/scorm/load_datamodel',
+    url: API_1484_11.basepath + '?q=node/' + API_1484_11.nid + '/scorm/load_datamodel',
     dataType: 'json',
     data: 'parameter=' + parameter,
     success: function (data, textStatus) {
