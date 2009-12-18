@@ -28,25 +28,25 @@ API_1484_11.Cmi.GetValue = function (name) {
       return '';
     }
   }
-  
+
   if (data.implemented === true && data.read === true) {
-    API_1484_11.Watchdog('CMI: GetValue return: ' + data.value);//DEBUG
-    
+    API_1484_11.Watchdog(Drupal.t('CMI: GetValue return: ') + data.value);//DEBUG
+
     //TODO: Special case handling and evaluation
-    
+
     // No error
     API_1484_11.SetError(0);
     return data.value;
   }
   else if (data.implemented === true && data.read === false && data.write === false) {
-    API_1484_11.Watchdog('CMI: GetValue return: ' + data.value);//DEBUG
+    API_1484_11.Watchdog(Drupal.t('CMI: GetValue return: ') + data.value);//DEBUG
 
     // General Argument Error
     API_1484_11.SetError(201);
     return '';
   }
   else if (data.implemented === true && data.read === false) {
-    API_1484_11.Watchdog('CMI: GetValue return: ' + data.value);//DEBUG
+    API_1484_11.Watchdog(Drupal.t('CMI: GetValue return: ') + data.value);//DEBUG
 
     // Data Model Element Is Write Only
     API_1484_11.SetError(405);
@@ -70,12 +70,12 @@ API_1484_11.Cmi.GetValue = function (name) {
 API_1484_11.Cmi.SetValue = function (name, value) {
   var session = API_1484_11.session;
 
-  // Switch from dot notation to array notation to prevent 
-  // errors in case a data model element name starts numeric 
+  // Switch from dot notation to array notation to prevent
+  // errors in case a data model element name starts numeric
   name = "['" + name.replace(/\./g, "']['") + "']";
 
   //FIXME: eval is evil.
-  
+
   if (eval("typeof session" + name + " === undefined")) {
     // Undefined Data Model Element
     API_1484_11.SetError(401);
@@ -85,12 +85,12 @@ API_1484_11.Cmi.SetValue = function (name, value) {
   if (eval("session" + name + "['implemented'] === true") && eval("session" + name + "['write'] === true")) {
     
     //TODO: Special case handling and evaluation
-    
+
     if (eval("session" + name + "['states'] != undefined")) {
       if (API_1484_11.InArray(value, eval("session" + name + "['states']"))) {
         // Save data to session
         this.CacheValue(name, value);
-        
+
         // No error
         API_1484_11.SetError(0);
         return true;
@@ -100,7 +100,7 @@ API_1484_11.Cmi.SetValue = function (name, value) {
         API_1484_11.SetError(406);
         return false;
       }
-      
+
     }
     else {
       // Save data to session

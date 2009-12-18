@@ -2,34 +2,34 @@
 // $Id$
 
 /**
+ * @file
  * SCORM 2004 - Reporting
+ *
+ * This module creates a Reporting section for each user.
  *
  * @author
  * Stefan Auditor <stefan.auditor@erdfisch.de>
+ * @TODO
+ * Views integration
  */
 
 /**
  * Implementation of hook_menu().
  */
-function scorm_reporting_menu($may_cache) {
-  global $user;
+function scorm_reporting_menu() {
   $items = array();
-  
-  if ($may_cache) {
-    if (arg(0) == 'user' AND is_numeric(arg(1))) {
-      $account = user_load(array('uid' => arg(1)));
-      $items[] = array(
-        'path' => 'user/' . arg(1) . '/scorm-reporting',
-        'title' => t('Reporting'),
-        'callback' => 'scorm_reporting_user_page',
-        'callback arguments' => array($account),
-        'access' => user_access('access reporting') || (user_access('access own reporting') && $user->uid == $account->uid),
-        'type' => MENU_LOCAL_TASK,
-      );
-    }
-  }
-  
+  $items['user/%user/scorm_reporting'] = array(
+    'title' => 'Reporting',
+    'page callback' => 'scorm_reporting_user_page',
+    'page arguments' => array(1),
+    'access callback' => 'scorm_reporting_access_callback',
+    'type' => MENU_LOCAL_TASK,
+  );
   return $items;
+}
+
+function scorm_reporting_access_callback() {
+  return user_access('access reporting') || user_access('access own reporting');
 }
 
 /**
@@ -40,12 +40,14 @@ function scorm_reporting_perm() {
 }
 
 /**
- *
+ * Reporting page; Menu callback.
  */
 function scorm_reporting_user_page($account) {
+
   $output = '';
+
   drupal_set_title($account->name);
-  
+
   $query = "SELECT DISTINCT(csid) FROM {cmi_learner_attempt} cla
             WHERE cla.uid = %d
             ORDER BY cla.claid ASC";
@@ -54,8 +56,7 @@ function scorm_reporting_user_page($account) {
     $current = scorm_reporting_get_current_attempt($account->uid, $row->csid);
     $current[0]['nid'] = l(t('resume'), 'node/' . $current[0]['nid']);
     $current[0]['total_time'] = cmi_ISO8601Duration_to_timestamp($current[0]['total_time'], 1);
-    dsm($current);
-    
+
     $header = array(t('Title'), t('Progress'), t('Success'), t('Total Time'));
     $output .= theme('table', $header, $current);
     
@@ -63,7 +64,7 @@ function scorm_reporting_user_page($account) {
 //    $header = array();
 //    $output .= theme('table', $header, $rows);
   }
-  
+
   return $output;
 }
 

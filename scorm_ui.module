@@ -1,5 +1,5 @@
 <?php
-/* $Id$ */
+// $Id$
 
 /**
  * SCORM 2004 - User interface
@@ -9,9 +9,9 @@
  */
 
 /**
- * 
+ * Implementation of hook_form_alter()
  */
-function scorm_ui_form_alter($form_id, &$form) {
+function scorm_ui_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'node_type_form') {
     $form['scorm']['scorm_ui'] = array(
       '#type' => 'fieldset',

@@ -2,6 +2,7 @@
 // $Id$
 
 /**
+ * @file
  * SCORM 2004 Datamodel (CMI) - User interface
  *
  * @author
@@ -11,6 +12,13 @@
  *       e.g. http://docs.jquery.com/UI/Slider  if (!$scorm_is_object = variable_get('scorm_is_object_' . $node->type, FALSE)) {
     return;
   }
+ */
+ 
+ /*
+ * @file
+ *
+ * This module provides a form for and updates user preferences and other data such as audio_level, language,
+ * delivery_speed, audio_captioning, mode, credit.
  */
 
 /**

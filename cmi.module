@@ -1,7 +1,8 @@
-<?php
+.<?php
 // $Id$
 
 /**
+ * @file
  * SCORM 2004 Datamodel (CMI)
  *
  * @author
@@ -22,52 +23,52 @@ define('CMI_SECOND', 1);
  * Define CMI data model elements
  */
 function cmi_dm() {
-  $dm = array ();
+  $dm = array();
 
-  $dm = array (
-    'cmi' => array (
-      '_version' => array (
+  $dm = array(
+    'cmi' => array(
+      '_version' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
       ),
 
-      'comments_from_learner' => array (
+      'comments_from_learner' => array(
         'read'        => FALSE,
         'write'       => FALSE,
         'implemented' => TRUE,
 
-        '_children' => array (
+        '_children' => array(
           'value'       => 'comment,location,timestamp',
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
-        '_count' => array (
+        '_count' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
-        0 => array (
+        0 => array(
           'read'        => FALSE,
           'write'       => FALSE,
           'implemented' => TRUE,
 
-          'comment' => array (
+          'comment' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'location'  => array (
+          'location'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'timestamp' => array (
+          'timestamp' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
@@ -76,41 +77,41 @@ function cmi_dm() {
         ),
       ),
 
-      'comments_from_lms' => array (
+      'comments_from_lms' => array(
         'read'        => FALSE,
         'write'       => FALSE,
         'implemented' => TRUE,
 
-        '_children' => array (
+        '_children' => array(
           'value'       => 'comment,location,timestamp',
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
-        '_count' => array (
+        '_count' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
-        0 => array (
+        0 => array(
           'read'        => FALSE,
           'write'       => FALSE,
           'implemented' => TRUE,
 
-          'comment' => array (
+          'comment' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => FALSE,
             'implemented' => TRUE,
           ),
-          'location'  => array (
+          'location'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => FALSE,
             'implemented' => FALSE,
           ),
-          'timestamp' => array (
+          'timestamp' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => FALSE,
@@ -119,12 +120,12 @@ function cmi_dm() {
         ),
       ),
 
-      'completion_status' => array (
+      'completion_status' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => TRUE,
         'implemented' => TRUE,
-        'states'      => array (
+        'states'      => array(
           0 => 'completed',
           1 => 'incomplete',
           2 => 'not attempted',
@@ -133,42 +134,42 @@ function cmi_dm() {
       ),
 
       //TODO: Initialize value from imsmanifest.xml on SCO import
-      'completion_threshold' => array (
+      'completion_threshold' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
       ),
 
-      'credit' => array (
+      'credit' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
-        'states'      => array (
+        'states'      => array(
           0 => 'credit',
           1 => 'no_credit',
         ),
       ),
 
-      'entry' => array (
+      'entry' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
-        'states'      => array (
+        'states'      => array(
           0 => 'ab_initio',
           1 => 'resume',
           2 => '',
         ),
       ),
 
-      'exit' => array (
+      'exit' => array(
         'value'       => NULL,
         'read'        => FALSE,
         'write'       => TRUE,
         'implemented' => TRUE,
-        'states'      => array (
+        'states'      => array(
           'timeout',
           'suspend',
           'logout',
@@ -177,46 +178,46 @@ function cmi_dm() {
         ),
       ),
 
-      'interactions' => array (
+      'interactions' => array(
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
 
-        '_children' => array (
+        '_children' => array(
           'value'       => 'id,type,objectives,timestamp,correct_responses,weighting,learner_response,result,latency,description',
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
-        '_count' => array (
+        '_count' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
-        0   => array (
+        0   => array(
           'read'        => FALSE,
           'write'       => FALSE,
           'implemented' => TRUE,
 
-          'objectives' => array (
+          'objectives' => array(
             'read'        => FALSE,
             'write'       => FALSE,
             'implemented' => TRUE,
 
-            '_count' => array (
+            '_count' => array(
               'value'       => NULL,
               'read'        => TRUE,
               'write'       => FALSE,
               'implemented' => TRUE,
             ),
 
-            0 => array (
+            0 => array(
               'read'        => FALSE,
               'write'       => FALSE,
               'implemented' => TRUE,
 
-              'id'  => array (
+              'id'  => array(
                 'value'       => NULL,
                 'read'        => TRUE,
                 'write'       => TRUE,
@@ -225,18 +226,18 @@ function cmi_dm() {
             ),
           ),
 
-          'id'  => array (
+          'id'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'type'  => array (
+          'type'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
-            'states'      => array (
+            'states'      => array(
               'true-false',
               'choice',
               'fill-in',
@@ -249,37 +250,37 @@ function cmi_dm() {
               'other',
             ),
           ),
-          'timestamp'  => array (
+          'timestamp'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'weighting'  => array (
+          'weighting'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'learner_response'  => array (
+          'learner_response'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'result'  => array (
+          'result'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'latency'  => array (
+          'latency'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'description'  => array (
+          'description'  => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
@@ -289,58 +290,58 @@ function cmi_dm() {
       ),
 
       //TODO: Initialize value from imsmanifest.xml on SCO import
-      'launch_data' => array (
+      'launch_data' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
       ),
 
-      'learner_id' => array (
+      'learner_id' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
       ),
 
-      'learner_name' => array (
+      'learner_name' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
       ),
 
-      'learner_preference' => array (
+      'learner_preference' => array(
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
 
-        '_children' => array (
+        '_children' => array(
           'value'       => 'audio_level,language,delivery_speed,audio_captioning',
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
 
-        'audio_level' => array (
+        'audio_level' => array(
           'value'       => 1,
           'read'        => TRUE,
           'write'       => TRUE,
           'implemented' => TRUE,
         ),
-        'language' => array (
+        'language' => array(
           'value'       => '',
           'read'        => TRUE,
           'write'       => TRUE,
           'implemented' => TRUE,
         ),
-        'delivery_speed' => array (
+        'delivery_speed' => array(
           'value'       => 1,
           'read'        => TRUE,
           'write'       => TRUE,
           'implemented' => TRUE,
         ),
-        'audio_captioning' => array (
+        'audio_captioning' => array(
           'value'       => 0,
           'read'        => TRUE,
           'write'       => TRUE,
@@ -348,7 +349,7 @@ function cmi_dm() {
         ),
       ),
 
-      'location' => array (
+      'location' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => TRUE,
@@ -356,86 +357,86 @@ function cmi_dm() {
       ),
 
       //TODO: Initialize value from imsmanifest.xml on SCO import
-      'max_time_allowed' => array (
+      'max_time_allowed' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
       ),
 
-      'mode' => array (
+      'mode' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
-        'states'      => array (
+        'states'      => array(
           'browse',
           'normal',
           'review',
         ),
       ),
 
-      'objectives' => array (
+      'objectives' => array(
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
 
-        '_children' => array (
+        '_children' => array(
           'value'       => 'id,score,success_status,completion_status,description',
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
-        '_count' => array (
+        '_count' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
 
-        0 => array (
+        0 => array(
           'read'        => FALSE,
           'write'       => FALSE,
           'implemented' => TRUE,
 
-          'id' => array (
+          'id' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
 
-          'score' => array (
+          'score' => array(
             'read'        => FALSE,
             'write'       => FALSE,
             'implemented' => TRUE,
 
-            '_children' => array (
+            '_children' => array(
               'value'       => 'scaled,raw,min,max',
               'read'        => TRUE,
               'write'       => FALSE,
               'implemented' => TRUE,
             ),
 
-            'scaled' => array (
+            'scaled' => array(
               'value'       => NULL,
               'read'        => TRUE,
               'write'       => TRUE,
               'implemented' => TRUE,
             ),
-            'raw' => array (
+            'raw' => array(
               'value'       => NULL,
               'read'        => TRUE,
               'write'       => TRUE,
               'implemented' => TRUE,
             ),
-            'min' => array (
+            'min' => array(
               'value'       => NULL,
               'read'        => TRUE,
               'write'       => TRUE,
               'implemented' => TRUE,
             ),
-            'max' => array (
+            'max' => array(
               'value'       => NULL,
               'read'        => TRUE,
               'write'       => TRUE,
@@ -443,25 +444,25 @@ function cmi_dm() {
             ),
           ),
 
-          'success_status' => array (
+          'success_status' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'completion_status' => array (
+          'completion_status' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'progress_measure' => array (
+          'progress_measure' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
             'implemented' => TRUE,
           ),
-          'description' => array (
+          'description' => array(
             'value'       => NULL,
             'read'        => TRUE,
             'write'       => TRUE,
@@ -470,7 +471,7 @@ function cmi_dm() {
         ),
       ),
 
-      'progress_measure' => array (
+      'progress_measure' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => TRUE,
@@ -478,44 +479,44 @@ function cmi_dm() {
       ),
 
       //TODO: Initialize value from imsmanifest.xml on SCO import
-      'scaled_passing_score' => array (
+      'scaled_passing_score' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
       ),
 
-      'score' => array (
+      'score' => array(
         'read'        => FALSE,
         'write'       => FALSE,
         'implemented' => TRUE,
 
-        '_children' => array (
+        '_children' => array(
           'value'       => 'scaled,min,max,raw',
           'read'        => TRUE,
           'write'       => FALSE,
           'implemented' => TRUE,
         ),
 
-        'scaled' => array (
+        'scaled' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => TRUE,
           'implemented' => TRUE,
         ),
-        'min' => array (
+        'min' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => TRUE,
           'implemented' => TRUE,
         ),
-        'max' => array (
+        'max' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => TRUE,
           'implemented' => TRUE,
         ),
-        'raw' => array (
+        'raw' => array(
           'value'       => NULL,
           'read'        => TRUE,
           'write'       => TRUE,
@@ -523,12 +524,12 @@ function cmi_dm() {
         ),
       ),
 
-//      'objectives' => array (
+//      'objectives' => array(
 //        'read'        => TRUE,
 //        'write'       => FALSE,
 //        'implemented' => TRUE,
 //
-//        '_children' => array (
+//        '_children' => array(
 //          'value'       => 'scaled,min,max,raw',
 //          'read'        => TRUE,
 //          'write'       => FALSE,
@@ -536,38 +537,38 @@ function cmi_dm() {
 //        ),
 //      ),
 
-      'session_time' => array (
+      'session_time' => array(
         'value'       => NULL,
         'read'        => FALSE,
         'write'       => TRUE,
         'implemented' => TRUE,
       ),
 
-      'success_status' => array (
+      'success_status' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => TRUE,
         'implemented' => TRUE,
-        'states'      => array (
+        'states'      => array(
           'passed',
           'failed',
           'unknown',
         ),
       ),
 
-      'suspend_data' => array (
+      'suspend_data' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => TRUE,
         'implemented' => TRUE,
       ),
 
-      'time_limit_action' => array (
+      'time_limit_action' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
         'implemented' => TRUE,
-        'states'      => array (
+        'states'      => array(
           'exit_message',
           'continue_message',
           'exit_no_message',
@@ -575,7 +576,7 @@ function cmi_dm() {
         ),
       ),
 
-      'total_time' => array (
+      'total_time' => array(
         'value'       => NULL,
         'read'        => TRUE,
         'write'       => FALSE,
@@ -596,7 +597,7 @@ function cmi_dm() {
  *
  * TODO: see 2.1.1.1 Managing Learner Attempts and Learner Sessions in SCORM_RunTimeEnv.pdf
  */
-function cmi_scorm_rte_initialize($params = array ()) {
+function cmi_scorm_rte_initialize($params = array()) {
   //Get SCO ID
   $query = "SELECT cs.csid FROM {cmi_sco} cs
               WHERE cs.nid=%d";
@@ -604,7 +605,7 @@ function cmi_scorm_rte_initialize($params = array ()) {
   $params['csid'] = db_result($result);
 
   //Check for latest attempt and session
-  $query = "SELECT * FROM cmi_learner_attempt cla
+  $query = "SELECT * FROM {cmi_learner_attempt} cla
               LEFT JOIN cmi_learner_session cls ON cla.claid = cls.claid
               WHERE cla.csid = %d
                 AND cla.uid = %d
@@ -653,14 +654,14 @@ function cmi_scorm_rte_initialize($params = array ()) {
  * the SCO when the SCO has determined that it no longer needs to communicate
  * with the LMS.
  */
-function cmi_scorm_rte_terminate($params = array ()) {
+function cmi_scorm_rte_terminate($params = array()) {
   return TRUE;
 }
 
 /**
  * Initialize data model
  */
-function cmi_scorm_rte_load_datamodel($params = array ()) {
+function cmi_scorm_rte_load_datamodel($params = array()) {
   $dm = cmi_dm();
 
   foreach ($dm['cmi'] as $key => $element) {
@@ -673,7 +674,7 @@ function cmi_scorm_rte_load_datamodel($params = array ()) {
  * Load data
  */
 function cmi_load_data($key, $element, $params) {
-  $data = array ();
+  $data = array();
 
   switch ($key) {
     default:
@@ -692,7 +693,7 @@ function cmi_load_data($key, $element, $params) {
  * The cmi._version keyword data model element can be used by the SCO to
  * determine the data model version supported by the LMS.
  */
-function cmi_get__version($params = array (), $data = array ()) {
+function cmi_get__version($params = array(), $data = array()) {
   $data['value'] = CMI_VERSION;
   return $data;
 }
@@ -727,7 +728,7 @@ function cmi_get__version($params = array (), $data = array ()) {
  * Implementation shall support, minimally, time periods in the range of January
  * 1, 1970 through January 1, 2038.
  */
-function cmi_get_comments_from_learner($params = array (), $data = array ()) {
+function cmi_get_comments_from_learner($params = array(), $data = array()) {
   // Count comments
   $query = "SELECT COUNT(ccfl.comment) FROM {cmi_sco} cs
               LEFT JOIN {cmi_comments_from_learner} ccfl ON cs.csid = ccfl.csid
@@ -790,7 +791,7 @@ function cmi_get_comments_from_learner($params = array (), $data = array ()) {
  * Implementation shall support, minimally, time periods in the range of January
  * 1, 1970 through January 1, 2038.
  */
-function cmi_get_comments_from_lms($params = array (), $data = array ()) {
+function cmi_get_comments_from_lms($params = array(), $data = array()) {
   // Count comments
   $query = "SELECT COUNT(c.cid) FROM {comments} c
               WHERE c.nid=%d
@@ -827,7 +828,7 @@ function cmi_get_comments_from_lms($params = array (), $data = array ()) {
  * This value indicates the overall completion status for the SCO as determined
  * by the SCO developer.
  */
-function cmi_get_completion_status($params = array (), $data = array ()) {
+function cmi_get_completion_status($params = array(), $data = array()) {
   $states = $data['states'];
 
   //Get required data
@@ -850,17 +851,17 @@ function cmi_get_completion_status($params = array (), $data = array ()) {
     if ($progress_measure >= $completion_threshold) {
       $status = $states[0];
     }
-    else if ($progress_measure < $completion_threshold) {
+    elseif ($progress_measure < $completion_threshold) {
       $status = $states[1];
     }
 
   }
-  else if ($completion_threshold) {
+  elseif ($completion_threshold) {
     $status = $states[3];
   }
-  else if ($progress_measure) {
+  elseif ($progress_measure) {
 
-    if (in_array ($completion_status, $states)) {
+    if (in_array($completion_status, $states)) {
       $status = $completion_status;
     }
     else {
@@ -891,7 +892,7 @@ function cmi_get_completion_status($params = array (), $data = array ()) {
  * This can be accomplished by comparing the cmi.completion_threshold to the
  * cmi.progress_measure, made by the learner, towards the completion of the SCO.
  */
-function cmi_get_completion_threshold($params = array (), $data = array ()) {
+function cmi_get_completion_threshold($params = array(), $data = array()) {
   $query = "SELECT completion_threshold FROM {cmi_sco} cs
               WHERE cs.nid=%d";
   $result = db_result(db_query($query, $params['nid']));
@@ -907,7 +908,7 @@ function cmi_get_completion_threshold($params = array (), $data = array ()) {
  * credit or no credit is outside the scope of SCORM. The default value for this
  * data model element is the fact that the SCO is being taken for credit.
  */
-function cmi_get_credit($params = array (), $data = array ()) {
+function cmi_get_credit($params = array(), $data = array()) {
   global $user;
   $states = $data['states'];
 
@@ -916,7 +917,7 @@ function cmi_get_credit($params = array (), $data = array ()) {
   if ($current_cmi_mode == 'browse' OR $current_cmi_mode == 'review') {
     $credit = $states[1];
   }
-  else if ($current_cmi_mode == 'normal') {
+  elseif ($current_cmi_mode == 'normal') {
     $credit = $user->cmi['credit'] ? $user->cmi['credit'] : $states[0];
   }
   $data['value'] = $credit ? $credit : $states[0];
@@ -935,7 +936,7 @@ function cmi_get_credit($params = array (), $data = array ()) {
  * indicates that the SCO is accessing run-time data for the current learner
  * attempt as set from the previous learner session on the SCO.
  */
-function cmi_get_entry($params = array (), $data = array ()) {
+function cmi_get_entry($params = array(), $data = array()) {
   $states = $data['states'];
 
   $query = "SELECT entry, exit_ FROM {cmi_sco} cs
@@ -949,7 +950,7 @@ function cmi_get_entry($params = array (), $data = array ()) {
   if (!$session->clsid) {
     $entry = $states[0];
   }
-  else if ($session->exit_ == 'suspend' OR $session->exit_ == 'logout') {
+  elseif ($session->exit_ == 'suspend' OR $session->exit_ == 'logout') {
     $entry = $states[1];
   }
   else {
@@ -964,7 +965,7 @@ function cmi_get_entry($params = array (), $data = array ()) {
  * The cmi.exit data model element indicates how or why the learner left the SCO.
  * This value is used to indicate the reason that the SCO was last exited.
  */
-function cmi_get_exit($params = array (), $data = array ()) {
+function cmi_get_exit($params = array(), $data = array()) {
   $states = $data['states'];
 
   $query = "SELECT exit_ FROM {cmi_sco} cs
@@ -974,7 +975,7 @@ function cmi_get_exit($params = array (), $data = array ()) {
                 AND cla.uid=%d
               ORDER BY cla.claid, cls.clsid DESC";
   $state = db_result(db_query($query, $params['nid'], $params['uid']));
-  $data['value'] = in_array ($state, $states) ? $state : $states[4];
+  $data['value'] = in_array($state, $states) ? $state : $states[4];
   return $data;
 }
 
@@ -1075,7 +1076,7 @@ function cmi_get_exit($params = array (), $data = array ()) {
  * The cmi.interactions.n.description data model element is a brief informative
  * description of the interaction.
  */
-function cmi_get_interactions($params = array (), $data = array ()) {
+function cmi_get_interactions($params = array(), $data = array()) {
   //TODO: Implement
   // Count interactions
   $query = "SELECT COUNT(ciid) FROM {cmi_interactions}";
@@ -1136,7 +1137,7 @@ function cmi_get_interactions($params = array (), $data = array ()) {
  * the SCO can use for initialization. The value of this data model element is
  * not specified.
  */
-function cmi_get_launch_data($params = array (), $data = array ()) {
+function cmi_get_launch_data($params = array(), $data = array()) {
   $query = "SELECT launch_data FROM {cmi_sco} cs
               WHERE cs.nid=%d";
   $result = db_result(db_query($query, $params['nid']));
@@ -1154,7 +1155,7 @@ function cmi_get_launch_data($params = array (), $data = array ()) {
  * learner registration process defined by the LMS. The cmi.learner_id
  * identifies the learner in a given LMS.
  */
-function cmi_get_learner_id($params = array (), $data = array ()) {
+function cmi_get_learner_id($params = array(), $data = array()) {
   global $user;
   $data['value'] = $user->uid;
   return $data;
@@ -1170,7 +1171,7 @@ function cmi_get_learner_id($params = array (), $data = array ()) {
  * creation and assignment of the cmi.learner_name, however there is no
  * restriction on how this process is accomplished.
  */
-function cmi_get_learner_name($params = array (), $data = array ()) {
+function cmi_get_learner_name($params = array(), $data = array()) {
   global $user;
   $data['value'] = $user->name;
   return $data;
@@ -1207,7 +1208,7 @@ function cmi_get_learner_name($params = array (), $data = array ()) {
  * The cmi.learner_preference.audio_captioning data model element specifies
  * whether captioning text corresponding to audio is displayed.
  */
-function cmi_get_learner_preference($params = array (), $data = array ()) {
+function cmi_get_learner_preference($params = array(), $data = array()) {
   global $user;
   $data['audio_level']['value']      = $user->cmi['audio_level']      ? (integer) $user->cmi['audio_level']      : (integer) $data['audio_level']['value'];
   $data['language']['value']         = $user->cmi['language']         ? (integer) $user->cmi['language']         : (integer) $data['language']['value'];
@@ -1223,7 +1224,7 @@ function cmi_get_learner_preference($params = array (), $data = array ()) {
  * attempts the SCO or if there is no preferred initial location, the value
  * shall be an empty characterstring (“”).
  */
-function cmi_get_location($params = array (), $data = array ()) {
+function cmi_get_location($params = array(), $data = array()) {
   $query = "SELECT location FROM {cmi_sco} cs
               LEFT JOIN {cmi_learner_attempt} cla ON cs.csid = cla.csid
               WHERE cs.nid=%d
@@ -1240,7 +1241,7 @@ function cmi_get_location($params = array (), $data = array ()) {
  * attempt begins with the beginning of the first learner session and continues
  * until the activity terminates.
  */
-function cmi_get_max_time_allowed($params = array (), $data = array ()) {
+function cmi_get_max_time_allowed($params = array(), $data = array()) {
   $query = "SELECT max_time_allowed FROM {cmi_sco} cs
               WHERE cs.nid=%d";
   $result = db_result(db_query($query, $params['nid']));
@@ -1253,7 +1254,7 @@ function cmi_get_max_time_allowed($params = array (), $data = array ()) {
  * which the SCO may be presented to the learner. This value can be used to
  * indicate a SCO’s behavior after launch.
  */
-function cmi_get_mode($params = array (), $data = array ()) {
+function cmi_get_mode($params = array(), $data = array()) {
   global $user;
   $states = $data['states'];
 
@@ -1357,7 +1358,7 @@ function cmi_get_mode($params = array (), $data = array ()) {
  * The cmi.objectives.n.description data model element provides a brief
  * informative description of the objective.
  */
-function cmi_get_objectives($params = array (), $data = array ()) {
+function cmi_get_objectives($params = array(), $data = array()) {
   //TODO: Implement
   // Count interactions
   $query = "SELECT COUNT(ciid) FROM {cmi_objectives}";
@@ -1379,7 +1380,7 @@ function cmi_get_objectives($params = array (), $data = array ()) {
  * The cmi.progress_measure data model element is a measure of the progress the
  * learner has made toward completing the SCO.
  */
-function cmi_get_progress_measure($params = array (), $data = array ()) {
+function cmi_get_progress_measure($params = array(), $data = array()) {
   $query = "SELECT progress_measure FROM {cmi_sco} cs
             LEFT JOIN {cmi_learner_attempt} cla ON cs.csid = cla.csid
               WHERE cs.nid=%d
@@ -1393,7 +1394,7 @@ function cmi_get_progress_measure($params = array (), $data = array ()) {
 /**
  *
  */
-function cmi_get_session_time($params = array (), $data = array ()) {
+function cmi_get_session_time($params = array(), $data = array()) {
   return $data;
 }
 
@@ -1403,7 +1404,7 @@ function cmi_get_session_time($params = array (), $data = array ()) {
  * fit therange -1 to 1 inclusive. The value indicates the passing scaled
  * score for a SCO.
  */
-function cmi_get_scaled_passing_score($params = array (), $data = array ()) {
+function cmi_get_scaled_passing_score($params = array(), $data = array()) {
   $query = "SELECT scaled_passing_score FROM {cmi_sco} cs
               WHERE cs.nid=%d";
   $result = db_result(db_query($query, $params['nid']));
@@ -1434,7 +1435,7 @@ function cmi_get_scaled_passing_score($params = array (), $data = array ()) {
  * cmi.score.max: The max data model element is the maximum value in the range
  * for the raw score.
  */
-function cmi_get_score($params = array (), $data = array ()) {
+function cmi_get_score($params = array(), $data = array()) {
   $query = "SELECT cla.claid FROM {cmi_learner_attempt} cla
               WHERE cla.uid = %d
               ORDER BY claid DESC";
@@ -1454,18 +1455,18 @@ function cmi_get_score($params = array (), $data = array ()) {
  * The cmi.success_status data model element indicates whether the learner has
  * mastered the SCO.
  */
-function cmi_get_success_status($params = array (), $data = array ()) {
+function cmi_get_success_status($params = array(), $data = array()) {
   //TODO: 4.2.22.1: Success Status Evaluation
   //possible states
   $states = $data['states'];
-  if (is_array ($states)) {
+  if (is_array($states)) {
     $query = "SELECT cla.success_status FROM {cmi_sco} cs
                 LEFT JOIN {cmi_learner_attempt} cla ON cs.csid = cla.csid
                 WHERE cs.nid=%d
                   AND cla.uid=%d
                 ORDER BY cla.claid DESC";
     $state = db_result(db_query($query, $params['nid'], $params['uid']));
-    $data['value'] = in_array ($state, $states) ? $state : $states[2];
+    $data['value'] = in_array($state, $states) ? $state : $states[2];
   }
   return $data;
 }
@@ -1480,7 +1481,7 @@ function cmi_get_success_status($params = array (), $data = array ()) {
  * provides additional space to store and retrieve suspend data between learner
  * sessions; suspend data may be used by the SCO to resume the learner attempt.
  */
-function cmi_get_suspend_data($params = array (), $data = array ()) {
+function cmi_get_suspend_data($params = array(), $data = array()) {
   $query = "SELECT suspend_data FROM {cmi_sco} cs
               LEFT JOIN {cmi_learner_attempt} cla ON cs.csid = cla.csid
               WHERE cs.nid=%d
@@ -1495,14 +1496,14 @@ function cmi_get_suspend_data($params = array (), $data = array ()) {
  * The cmi.time_limit_action data model element indicates what the SCO should do
  * when cmi.max_time_allowed is exceeded.
  */
-function cmi_get_time_limit_action($params = array (), $data = array ()) {
+function cmi_get_time_limit_action($params = array(), $data = array()) {
   //possible states
   $states = $data['states'];
-  if (is_array ($states)) {
+  if (is_array($states)) {
     $query = "SELECT time_limit_action FROM {cmi_sco} cs
                 WHERE cs.nid=%d";
     $state = db_result(db_query($query, $params['nid']));
-    $data['value'] = in_array ($state, $states) ? $state : $states[3];
+    $data['value'] = in_array($state, $states) ? $state : $states[3];
   }
   return $data;
 }
@@ -1511,7 +1512,7 @@ function cmi_get_time_limit_action($params = array (), $data = array ()) {
  * The cmi.time_limit_action data model element indicates what the SCO should do
  * when cmi.max_time_allowed is exceeded.
  */
-function cmi_get_total_time($params = array (), $data = array ()) {
+function cmi_get_total_time($params = array(), $data = array()) {
   $query = "SELECT total_time FROM {cmi_sco} cs
               LEFT JOIN {cmi_learner_attempt} cla ON cs.csid = cla.csid
               WHERE cs.nid=%d
@@ -1525,7 +1526,7 @@ function cmi_get_total_time($params = array (), $data = array ()) {
 /**
  *  Implementation of hook_commit().
  */
-function cmi_scorm_rte_commit($params = array (), $session = array ()) {
+function cmi_scorm_rte_commit($params = array(), $session = array()) {
   $query = "SELECT clsid FROM {cmi_learner_session} cls
               LEFT JOIN {cmi_learner_attempt} cla ON cls.claid = cla.claid
               LEFT JOIN {cmi_sco} cs ON cla.csid = cs.csid
@@ -1542,7 +1543,7 @@ function cmi_scorm_rte_commit($params = array (), $session = array ()) {
   }
 
   //TODO: Check for a false in $dm['cmi']
-  return true;
+  return TRUE;
 }
 
 /**
@@ -1553,7 +1554,7 @@ function cmi_set_comments_from_learner($params = array(), $data = array()) {
 
   // Unimplemented Data Model Element
   scorm_rte_set_error(array('error_code' => 402));
-  return false;
+  return FALSE;
 }
 
 /**
@@ -1575,7 +1576,7 @@ function cmi_set_completion_status($params = array(), $data = array()) {
  * The cmi.exit data model element indicates how or why the learner left the SCO.
  * This value is used to indicate the reason that the SCO was last exited.
  */
-function cmi_set_exit($params = array (), $data = array ()) {
+function cmi_set_exit($params = array(), $data = array()) {
   if ($data['changed'] == TRUE) {
     $query = "UPDATE {cmi_learner_session} SET exit_ = '%s' WHERE clsid=%d";
     $success = db_query($query, $data['value'], $params['clsid']);
@@ -1591,7 +1592,7 @@ function cmi_set_interactions($params = array(), $data = array()) {
 
   // Unimplemented Data Model Element
   scorm_rte_set_error(array('error_code' => 402));
-  return false;
+  return FALSE;
 }
 
 /**
@@ -1604,7 +1605,7 @@ function cmi_set_learner_preference($params = array(), $data = array()) {
 
   // Unimplemented Data Model Element
   scorm_rte_set_error(array('error_code' => 402));
-  return false;
+  return FALSE;
 }
 
 /**
@@ -1629,7 +1630,7 @@ function cmi_set_objectives($params = array(), $data = array()) {
 
   // Unimplemented Data Model Element
   scorm_rte_set_error(array('error_code' => 402));
-  return false;
+  return FALSE;
 }
 
 /**
@@ -1668,7 +1669,7 @@ function cmi_set_score($params = array(), $data = array()) {
         $success = db_query($query, $item, $data[$item]['value'], $params['cscid']);
       }
       else {
-        $query = "INSERT INTO {cmi_score} (claid, %s) VALUES (%d, %f)";
+        $query = "INSERT INTO {cmi_score} (claid, '%s') VALUES (%d, %f)";
         $success = db_query($query, $item, $params['claid'], $data[$item]['value']);
 
         $query = "SELECT csc.cscid FROM {cmi_score} csc

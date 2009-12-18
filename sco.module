@@ -2,7 +2,13 @@
 // $Id$
 
 /**
+ * @file
  * SCORM 2004 Sharable Content Object (SCO)
+ *
+ * This module adds to the sco type create node form allowing you to upload an sco in zip format.
+ * After succesful upload it unpacks the sco and parses the imsmanifest.xml file and loads data
+ * from that file into the database which is pertinent to the launch of that sco.
+ * You need to create an sco content type and also have the upload module active.
  *
  * @author
  * Stefan Auditor <stefan.auditor@erdfisch.de>
@@ -11,7 +17,7 @@
 define("SCORM_SCO_DIRECTORY", 'scorm');
 
 /**
- * Implementation of hook_menu().
+ * Implementation of hook_nodeapi().
  */
 function sco_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   if (!$scorm_is_object = variable_get('scorm_is_object_story', FALSE)) {
@@ -30,9 +36,9 @@ function sco_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
       $view_mode = variable_get('scorm_view_mode', 2);
       if (($view_mode == 1 && $a3 == 1) || ($view_mode == 2 && !$a3) || $view_mode == 3) {
         //TODO: check for file to attach, if not available attach a generic tracking js
-        $node->conent['#prefix'] = '<div id="API_1484_11">';
+        $node->content['#prefix'] = '<div id="API_1484_11">';
         
-        switch($node->scorm['type']) {
+        switch ($node->scorm['type']) {
           case 'imsmanifest':
             $node->content['sco'] = array(
               '#value' => theme('sco', $node),
@@ -66,8 +72,8 @@ function sco_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
         if ($file = sco_unpack($node)) {
           $imsmanifest = sco_parse_imsmanifest($file->imsmanifest);
           if (is_object($imsmanifest)) {
-            dsm($imsmanifest);
-            dsm($file);
+            //dsm($imsmanifest);
+            //dsm($file);
           }
           db_query("INSERT INTO {cmi_sco} SET nid = %d, completion_threshold = '%s', launch_data = '%s', max_time_allowed = '%s', scaled_passing_score = '%F', time_limit_action = '%s'", $node->nid, $imsmanifest->completion_threshold, $imsmanifest->launch_data, $imsmanifest->max_time_allowed, $imsmanifest->scaled_passing_score, $imsmanifest->time_limit_action);
         }
@@ -82,7 +88,7 @@ function sco_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
 /**
  * Implementation of hook_form_alter().
  */
-function sco_form_alter($form_id, &$form) {
+function sco_form_alter(&$form, &$form_state, $form_id) {
   if (!$scorm_is_object = variable_get('scorm_is_object_' . $form['type']['#value'], FALSE)) {
     return;
   }
@@ -91,7 +97,7 @@ function sco_form_alter($form_id, &$form) {
     $form['attachments']['#collapsed'] = FALSE;
     $form['attachments']['#weight'] = 0;
     $form['attachments']['#title'] = t('Sharable Content Object');
-    $form['attachments']['#description'] = t('<div>A SCO is a collection of one or more Assets that represent a single launchable learning resource. Only the first *.zip file will be consired a SCO.</div>'). $form['attachments']['#description'];
+    $form['attachments']['#description'] = t('<div>A SCO is a collection of one or more Assets that represent a single launchable learning resource. Only the first *.zip file will be consired a SCO.</div>') . $form['attachments']['#description'];
     $form['attachments']['wrapper']['new']['upload']['#title'] = t('Attach new SCO');
   }
 }
@@ -199,4 +205,15 @@ function theme_sco($node) {
   //$output .= '<iframe id="API_1484_11_iframe" name="scorm" src="'. base_path() . drupal_get_path('module', 'scorm_rte') .'/docs/proddingsco/proddingsco.htm"></iframe>';
   //$output .= '</div>';
   return $output;
+}
+
+/**
+ * Implement hook_theme().
+ */
+function sco_theme() {
+  return array(
+    'sco' => array(
+      'arguments' => array('node' => $node),
+    ),
+  );
 }

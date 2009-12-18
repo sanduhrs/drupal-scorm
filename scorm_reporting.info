@@ -2,3 +2,4 @@
 name = Reporting
 description = SCORM assessment reports.
 package = "LMS"
+core = 6.x

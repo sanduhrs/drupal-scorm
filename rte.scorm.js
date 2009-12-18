@@ -72,7 +72,7 @@ API_1484_11.session = [];
  *        function.
  */
 API_1484_11.Initialize = function (parameter) {
-  this.Watchdog('RTE: Initialize');//DEBUG
+  this.Watchdog(Drupal.t('RTE: Initialize'));//DEBUG
 
   if (this.state === this.API_STATE_1) {
     // Already initialized
@@ -86,7 +86,7 @@ API_1484_11.Initialize = function (parameter) {
     data: 'parameter=' + parameter,
     dataType: 'json',
     success: function (data, textStatus) {
-      API_1484_11.Watchdog('RTE: Initialize return: ' + textStatus + ' (' + data + ')');//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Initialize return: ') + textStatus + ' (' + data + ')');//DEBUG
 
       // Set error in case LMS side fails to initialize
       if (data === false) {
@@ -95,7 +95,7 @@ API_1484_11.Initialize = function (parameter) {
       }
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      API_1484_11.Watchdog('RTE: Initialize error:' + textStatus + ':' + errorThrown);//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Initialize error:') + textStatus + ':' + errorThrown);//DEBUG
 
       // General communication failure (Ajax)
       API_1484_11.SetError(1000);
@@ -139,7 +139,7 @@ API_1484_11.Initialize = function (parameter) {
  *        function.
  */
 API_1484_11.Terminate = function (parameter) {
-  this.Watchdog('RTE: Terminate');//DEBUG
+  this.Watchdog(Drupal.t('RTE: Terminate'));//DEBUG
 
   if (this.state === this.API_STATE_0) {
     // Termination Before Initialization
@@ -161,7 +161,7 @@ API_1484_11.Terminate = function (parameter) {
     dataType: 'json',
     data: 'parameter=' + parameter,
     success: function (data, textStatus) {
-      API_1484_11.Watchdog('RTE: Terminate return:' + textStatus + ' (' + data + ')');//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Terminate return:') + textStatus + ' (' + data + ')');//DEBUG
       
       // Set error in case LMS side fails to terminate
       if (data === false) {
@@ -170,7 +170,7 @@ API_1484_11.Terminate = function (parameter) {
       }
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      API_1484_11.Watchdog('RTE: Terminate error:' + textStatus + ':' + errorThrown);//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Terminate error:') + textStatus + ':' + errorThrown);//DEBUG
       
       // General communication failure (Ajax)
       API_1484_11.SetError(1000);
@@ -206,7 +206,7 @@ API_1484_11.Terminate = function (parameter) {
 API_1484_11.GetValue = function (name) {
   var data  = '', data_model = this.UcFirst(name.split('.').shift());
 
-  this.Watchdog('RTE: GetValue ' + name);//DEBUG
+  this.Watchdog(Drupal.t('RTE: GetValue ') + name);//DEBUG
 
   if (this.state === this.API_STATE_0) {
     // Retrieve Data Before Initialization
@@ -266,7 +266,7 @@ API_1484_11.GetValue = function (name) {
 API_1484_11.SetValue = function (name, value) {
   var data_model = this.UcFirst(name.split('.').shift());
 
-  this.Watchdog('RTE: SetValue ' + name + ':' + value);//DEBUG
+  this.Watchdog(Drupal.t('RTE: SetValue ') + name + ':' + value);//DEBUG
   
   if (this.state === this.API_STATE_0) {
     // Store Data Before Initialization
@@ -336,7 +336,7 @@ API_1484_11.Commit = function (parameter) {
   // Encode the session data to JSON
   var session = JSON.stringify(this.session);
   
-  this.Watchdog('RTE: Commit: ' + session);//DEBUG
+  this.Watchdog(Drupal.t('RTE: Commit: ') + session);//DEBUG
 
   if (this.state === this.API_STATE_0) {
     // Commit Before Initialization
@@ -355,10 +355,10 @@ API_1484_11.Commit = function (parameter) {
     url: API_1484_11.basepath + '?q=node/' + API_1484_11.nid + '/scorm/commit',
     data: {parameter: parameter, session: session},
     success: function (data, textStatus) {
-      API_1484_11.Watchdog('RTE: Commit: ' + textStatus + ' (' + data + ')');//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Commit: ') + textStatus + ' (' + data + ')');//DEBUG
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      API_1484_11.Watchdog('RTE: Commit error:' + textStatus + ':' + errorThrown);//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Commit error: ') + textStatus + ':' + errorThrown);//DEBUG
 
       // General communication failure (Ajax)
       API_1484_11.SetError(1000);
@@ -386,7 +386,7 @@ API_1484_11.Commit = function (parameter) {
  *   representing the error code of the last error encountered.
  */
 API_1484_11.GetLastError = function () {
-  this.Watchdog('RTE: GetLastError (' + this.error + ')');//DEBUG
+  this.Watchdog(Drupal.t('RTE: GetLastError ') + '(' + this.error + ')');//DEBUG
   
   return this.error;
 };
@@ -419,7 +419,7 @@ API_1484_11.GetLastError = function () {
  *         empty characterstring shall be returned.
  */
 API_1484_11.GetErrorString = function (error_code) {
-  this.Watchdog('RTE: GetErrorString (' + error_code + '): ' + this.error_strings[error_code]);//DEBUG
+  this.Watchdog(Drupal.t('RTE: GetErrorString ') + '(' + error_code + '): ' + this.error_strings[error_code]);//DEBUG
 
   return this.error_strings[error_code] ? this.error_strings[error_code] : '';
 };
@@ -447,22 +447,22 @@ API_1484_11.GetErrorString = function (error_code) {
 API_1484_11.GetDiagnostic = function (parameter) {
   var output = '';
   
-  this.Watchdog('RTE: GetDiagnostic: (' + parameter + ')');//DEBUG
+  this.Watchdog(Drupal.t('RTE: GetDiagnostic: ') + '(' + parameter + ')');//DEBUG
 
   // Return error description in case an error code is given
   if (parameter && this.error_strings[parameter] && parameter.length > 0) {
     output = parameter + ': ' + this.error_strings[parameter];
-    this.Watchdog('RTE: GetDiagnostic return: (' + output + ') (Error string requested error)');//DEBUG
+    this.Watchdog(Drupal.t('RTE: GetDiagnostic return: ') + '(' + output + ') (Error string requested error)');//DEBUG
   }
   // Return error description of last error
   else if (parameter === '') {
     output = this.error + ': ' + this.error_strings[parameter];
-    this.Watchdog('RTE: GetDiagnostic return: (' + output + ') (Error string last error)');//DEBUG
+    this.Watchdog(Drupal.t('RTE: GetDiagnostic return: ') + '(' + output + ') (Error string last error)');//DEBUG
   }
   // Unknown - return empty string
   else {
     // Nothing to do
-    this.Watchdog('RTE: GetDiagnostic return: (' + output + ') (Empty string)');//DEBUG
+    this.Watchdog(Drupal.t('RTE: GetDiagnostic return: ') + '(' + output + ') (Empty string)');//DEBUG
   }
 
   return output;
@@ -476,7 +476,7 @@ API_1484_11.GetDiagnostic = function (parameter) {
  * Set error
  */
 API_1484_11.SetError = function (parameter) {
-  this.Watchdog('RTE: Set Error (' + parameter + ')');//DEBUG
+  this.Watchdog(Drupal.t('RTE: Set Error ') + '(' + parameter + ')');//DEBUG
   
   // Set error
   this.error = parameter;
@@ -505,11 +505,11 @@ API_1484_11.SetError = function (parameter) {
  * Set conceptual communication state
  */
 API_1484_11.SetState = function (parameter) {
-  this.Watchdog('RTE: Set state: ' + parameter);//DEBUG
+  this.Watchdog(Drupal.t('RTE: Set state: ') + parameter);//DEBUG
   
   this.state = parameter;
   
-  this.Watchdog('RTE: State set to: ' + this.state);//DEBUG
+  this.Watchdog(Drupal.t('RTE: State set to: ') + this.state);//DEBUG
 
   return true;
 };
@@ -518,20 +518,20 @@ API_1484_11.SetState = function (parameter) {
  * Load error strings
  */
 API_1484_11.LoadErrorStrings = function () {
-  this.Watchdog('RTE: Load Error Strings');//DEBUG
+  this.Watchdog(Drupal.t('RTE: Load Error Strings'));//DEBUG
         
   // Load error strings
   $.ajax({
     url: API_1484_11.basepath + '?q=node/' + API_1484_11.nid + '/scorm/get_error_string',
     dataType: 'json',
     success: function (data, textStatus) {
-      API_1484_11.Watchdog('RTE: Load Error Strings return: ' + textStatus + ' (' + data + ')');//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Load Error Strings return: ') + textStatus + ' (' + data + ')');//DEBUG
       
       // Cache error strings
       API_1484_11.error_strings = data;
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      API_1484_11.Watchdog('RTE: Load Error Strings error: ' + textStatus + ':' + errorThrown);//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Load Error Strings error: ') + textStatus + ':' + errorThrown);//DEBUG
       
       // General communication failure (Ajax)
       API_1484_11.SetError(1000);
@@ -543,7 +543,7 @@ API_1484_11.LoadErrorStrings = function () {
  * Load data model
  */
 API_1484_11.LoadDataModel = function (parameter) {
-  this.Watchdog('RTE: Load Data');//DEBUG
+  this.Watchdog(Drupal.t('RTE: Load Data'));//DEBUG
 
   // Load error strings
   $.ajax({
@@ -551,13 +551,13 @@ API_1484_11.LoadDataModel = function (parameter) {
     dataType: 'json',
     data: 'parameter=' + parameter,
     success: function (data, textStatus) {
-      API_1484_11.Watchdog('RTE: Load Data return: ' + textStatus + ' (' + data + ')');//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Load Data return: ') + textStatus + ' (' + data + ')');//DEBUG
       
       // Cache session data
       API_1484_11.session = data;
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
-      API_1484_11.Watchdog('RTE: Load Data error: ' + textStatus + ':' + errorThrown);//DEBUG
+      API_1484_11.Watchdog(Drupal.t('RTE: Load Data error: ') + textStatus + ':' + errorThrown);//DEBUG
       
       // General communication failure (Ajax)
       API_1484_11.SetError(1000);

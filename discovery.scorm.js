@@ -27,7 +27,7 @@ API_1484_11_Discovery.ScanParentsForApi = function(win) {
     nParentsSearched++;
     win = win.parent;
   }
-  
+
   return win.API_1484_11;
 };
 
@@ -57,5 +57,5 @@ var API_1484_11 = null;
 API_1484_11 = API_1484_11_Discovery.GetApi(); 
 
 if (API_1484_11 === null) {
-  $('.node').eq(0).prepend('<div class="messages error">Could not find SCORM API, SCORM functionality not available.</div>');
+  $('.node').eq(0).prepend('<div class="messages error">'+Drupal.t('Could not find SCORM API, SCORM functionality not available.')+'</div>');
 }

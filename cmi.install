@@ -2,6 +2,7 @@
 // $Id$
 
 /**
+ * @file
  * SCORM 2004 Datamodel (CMI)
  *
  * @author
@@ -9,136 +10,162 @@
  */
 
 /**
+ * Implementation of hook_schema().
+ */
+function cmi_schema() {
+  $schema['cmi_comments_from_learner'] = array(
+    'fields' => array(
+      'csid'      => array('type' => 'int', 'not null' => TRUE),
+      'uid'       => array('type' => 'int', 'not null' => TRUE),
+      'comment'   => array('type' => 'varchar', 'length' => 250, 'not null' => FALSE),
+      'location'  => array('type' => 'varchar', 'length' => 250, 'not null' => FALSE),
+      'timestamp' => array('type' => 'int', 'not null' => FALSE),
+    ),
+    'indexes' => array(
+      'csid'      => array('csid'),
+    ),
+  );
+
+  $schema['cmi_interactions'] = array(
+    'fields' => array(
+      'ciid'              => array('type' => 'int', 'not null' => TRUE),
+      'clsid'             => array('type' => 'int', 'not null' => TRUE),
+      'id'                => array('type' => 'text', 'not null' => FALSE),
+      'type'              => array('type' => 'varchar', 'length' => 15, 'not null' => FALSE),
+      'timestamp'         => array('type' => 'int', 'not null' => FALSE),
+      'weighting'         => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'learner_response'  => array('type' => 'text', 'not null' => FALSE),
+      'result'            => array('type' => 'text', 'not null' => FALSE),
+      'latency'           => array('type' => 'varchar', 'length' => 15, 'not null' => TRUE, 'default' => 'PT0H0M0S'),
+      'description'       => array('type' => 'varchar', 'length' => 250, 'not null' => FALSE),
+    ),
+    'primary key' => array('ciid'),
+  );
+
+  $schema['cmi_interactions_correct_responses'] = array(
+    'fields' => array(
+      'cirid'     => array('type' => 'int', 'not null' => TRUE),
+      'ciid'      => array('type' => 'int', 'not null' => TRUE),
+      'pattern'   => array('type' => 'text', 'not null' => FALSE),
+    ),
+    'primary key' => array('cirid'),
+  );
+
+  $schema['cmi_interactions_objectives'] = array(
+    'fields' => array(
+      'ciid'  => array('type' => 'int', 'not null' => TRUE),
+      'id'    => array('type' => 'text', 'not null' => FALSE),
+    ),
+    'primary key' => array('ciid'),
+  );
+
+  $schema['cmi_learner'] = array(
+    'fields' => array(
+      'uid'               => array('type' => 'int', 'not null' => TRUE),
+      'credit'            => array('type' => 'varchar', 'length' => 10, 'not null' => FALSE),
+      'audio_level'       => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'language'          => array('type' => 'varchar', 'length' => 250, 'not null' => FALSE),
+      'delivery_speed'    => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'audio_captioning'  => array('type' => 'int', 'not null' => FALSE),
+      'mode'              => array('type' => 'varchar', 'length' => 10, 'not null' => FALSE),
+    ),
+    'primary key' => array('uid'),
+  );
+
+  $schema['cmi_learner_attempt'] = array(
+    'fields' => array(
+      'claid'             => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'csid'              => array('type' => 'int', 'not null' => TRUE),
+      'uid'               => array('type' => 'int', 'not null' => TRUE),
+      'completion_status' => array('type' => 'varchar', 'length' => 15, 'not null' => FALSE),
+      'location'          => array('type' => 'text', 'not null' => FALSE),
+      'progress_measure'  => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'success_status'    => array('type' => 'varchar', 'length' => 10, 'not null' => FALSE),
+      'suspend_data'      => array('type' => 'text', 'not null' => FALSE),
+      'total_time'        => array('type' => 'varchar', 'length' => 15, 'not null' => TRUE, 'default' => 'PT0H0M0S'),
+    ),
+    'primary key' => array('claid'),
+  );
+
+  $schema['cmi_learner_session'] = array(
+    'fields' => array(
+      'clsid'         => array('type' => 'serial', 'not null' => TRUE),
+      'claid'         => array('type' => 'int', 'not null' => TRUE),
+      'entry'         => array('type' => 'varchar', 'length' => 10, 'not null' => FALSE),
+      'exit_'         => array('type' => 'varchar', 'length' => 10, 'not null' => FALSE),
+      'session_time'  => array('type' => 'varchar', 'length' => 15, 'not null' => TRUE, 'default' => 'PT0H0M0S'),
+      'timestamp'     => array('type' => 'int', 'not null' => TRUE),
+    ),
+    'primary key' => array('clsid'),
+  );
+
+  $schema['cmi_objectives'] = array(
+    'fields' => array(
+      'coid'              => array('type' => 'int', 'not null' => TRUE),
+      'ciid'              => array('type' => 'int', 'not null' => FALSE),
+      'id'                => array('type' => 'text',  'not null' => FALSE),
+      'success_status'    => array('type' => 'varchar', 'length' => 10, 'not null' => FALSE),
+      'completion_status' => array('type' => 'varchar', 'length' => 15, 'not null' => FALSE),
+      'progress_measure'  => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'description'       => array('type' => 'varchar', 'length' => 250, 'not null' => FALSE),
+    ),
+    'primary key' => array('coid'),
+  );
+
+  $schema['cmi_objectives_score'] = array(
+    'fields' => array(
+      'coid'    => array('type' => 'int', 'not null' => TRUE),
+      'scaled'  => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'raw'     => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'min'     => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'max'     => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+    ),
+    'primary key' => array('coid'),
+  );
+
+  $schema['cmi_sco'] = array(
+    'fields' => array(
+      'csid'                  => array('type' => 'serial', 'not null' => TRUE),
+      'nid'                   => array('type' => 'int', 'not null' => TRUE),
+      'completion_threshold'  => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'launch_data'           => array('type' => 'text', 'not null' => FALSE),
+      'max_time_allowed'      => array('type' => 'varchar', 'length' => 15, 'not null' => FALSE),
+      'scaled_passing_score'  => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'time_limit_action'     => array('type' => 'varchar', 'length' => 20, 'not null' => FALSE),
+    ),
+    'primary key' => array('csid'),
+  );
+
+  $schema['cmi_score'] = array(
+    'fields' => array(
+      'cscid'   => array('type' => 'serial', 'not null' => TRUE),
+      'claid'   => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'scaled'  => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'raw'     => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'max'     => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+      'min'     => array('type' => 'float', 'size' => 'big', 'not null' => FALSE),
+    ),
+    'primary key' => array('cscid'),
+  );
+
+  return $schema;
+}
+
+/**
  * Implementation of hook_install().
  */
 function cmi_install() {
-   switch ($GLOBALS['db_type']) {
-     case 'mysql':
-     case 'mysqli':
-       db_query("CREATE TABLE {cmi_comments_from_learner} (
-                  csid int(11) NOT NULL,
-                  uid int(11) NOT NULL,
-                  comment varchar(250) default NULL,
-                  location varchar(250) default NULL,
-                  timestamp int(11) default NULL,
-                  KEY csid (csid)
-                ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_interactions} (
-                    ciid int(11) NOT NULL,
-                    clsid int(11) NOT NULL,
-                    id text,
-                    type varchar(15) default NULL,
-                    timestamp int(11) default NULL,
-                    weighting double(10,7) default NULL,
-                    learner_response text,
-                    result text,
-                    latency varchar(15) NOT NULL default 'PT0H0M0S',
-                    description varchar(250) default NULL,
-                    PRIMARY KEY (ciid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_interactions_correct_responses} (
-                    cirid int(11) NOT NULL,
-                    ciid int(11) NOT NULL,
-                    pattern text,
-                    PRIMARY KEY (cirid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_interactions_objectives} (
-                    ciid int(11) NOT NULL,
-                    id text,
-                    PRIMARY KEY (ciid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_learner} (
-                    uid int(11) NOT NULL,
-                    credit varchar(10) default NULL,
-                    audio_level double(10,7) default NULL,
-                    language varchar(250) default NULL,
-                    delivery_speed double(10,7) default NULL,
-                    audio_captioning int(10) default NULL,
-                    mode varchar(10) default NULL,
-                    PRIMARY KEY (uid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_learner_attempt} (
-                    claid int(11) unsigned NOT NULL auto_increment,
-                    csid int(11) NOT NULL,
-                    uid int(11) NOT NULL,
-                    completion_status varchar(15) default NULL,
-                    location text,
-                    progress_measure double(10,7) default NULL,
-                    success_status varchar(10) default NULL,
-                    suspend_data text,
-                    total_time varchar(15) NOT NULL default 'PT0H0M0S',
-                    PRIMARY KEY  (claid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_learner_session} (
-                    clsid int(11) NOT NULL auto_increment,
-                    claid int(11) NOT NULL,
-                    entry varchar(10) default NULL,
-                    exit_ varchar(10) default NULL,
-                    session_time varchar(15) NOT NULL default 'PT0H0M0S',
-                    timestamp int(11) NOT NULL,
-                    PRIMARY KEY (clsid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_objectives} (
-                    coid int(11) NOT NULL,
-                    ciid int(11) default NULL,
-                    id text,
-                    success_status varchar(10) default NULL,
-                    completion_status varchar(15) default NULL,
-                    progress_measure double(10,7) default NULL,
-                    description varchar(250) default NULL,
-                    PRIMARY KEY (coid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_objectives_score} (
-                    coid int(11) NOT NULL,
-                    scaled double(10,7) default NULL,
-                    raw double(10,7) default NULL,
-                    min double(10,7) default NULL,
-                    max double(10,7) default NULL,
-                    PRIMARY KEY (coid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_sco} (
-                    csid int(11) NOT NULL auto_increment,
-                    nid int(11) NOT NULL,
-                    completion_threshold double(10,7) default NULL,
-                    launch_data text,
-                    max_time_allowed varchar(15) default NULL,
-                    scaled_passing_score double(10,7) default NULL,
-                    time_limit_action varchar(20) default NULL,
-                    PRIMARY KEY (csid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       db_query("CREATE TABLE {cmi_score} (
-                    cscid int(11) NOT NULL auto_increment,
-                    claid int(11) unsigned NOT NULL,
-                    scaled double(10,7) default NULL,
-                    raw double(10,7) default NULL,
-                    max double(10,7) default NULL,
-                    min double(10,7) default NULL,
-                    PRIMARY KEY (cscid)
-                  ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
-       break;
-     case 'pgsql':
-       break;
-   }
+  drupal_install_schema('cmi');
 }
 
 /**
  * Implementation of hook_uninstall().
  */
-function cmi_uninstall() {
-  db_query('DROP TABLE {cmi_comments_from_learner}');
-  db_query('DROP TABLE {cmi_interactions}');
-  db_query('DROP TABLE {cmi_interactions_correct_responses}');
-  db_query('DROP TABLE {cmi_interactions_objectives}');
-  db_query('DROP TABLE {cmi_learner}');
-  db_query('DROP TABLE {cmi_learner_attempt}');
-  db_query('DROP TABLE {cmi_learner_session}');
-  db_query('DROP TABLE {cmi_objectives}');
-  db_query('DROP TABLE {cmi_objectives_score}');
-  db_query('DROP TABLE {cmi_sco}');
-  db_query('DROP TABLE {cmi_score}');
-  
+ function cmi_uninstall() {
+  drupal_uninstall_schema('cmi');
+
   $node_types = node_get_types();
-  foreach($node_types as $type => $node) {
+  foreach ($node_types as $type => $node) {
     variable_del('scorm_is_object_' . $type);
     variable_del('scorm_view_mode_' . $type);
   }

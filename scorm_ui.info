@@ -2,3 +2,4 @@
 name = SCORM - User Interface
 description = The SCORM user interface.
 package = "LMS"
+core = 6.x

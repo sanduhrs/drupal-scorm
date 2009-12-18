@@ -10,7 +10,7 @@
 // Global killswitch
 if (Drupal.jsEnabled) {
   $(document).ready(function() {
-  
+
     $(function() {
       $('.flowplayer').each(function() {
         // Get Flowplayer
@@ -28,9 +28,9 @@ if (Drupal.jsEnabled) {
           var clip = this.getClip();
           stop = new Date();
           var elapsed = ((stop.getTime()-start.getTime())/1000);
-          
+
           // Assume success if elapsed time is 90% of clip duration
-          // TODO: make this configurable 
+          // TODO: make this configurable
           var success = (((elapsed/clip.metaData.duration)*100) >= 90) ? 'passed' : 'failed';
           API_1484_11.SetValue('cmi.success_status', success);
           API_1484_11.SetValue('cmi.session_time', 'PT' + elapsed.toFixed(2) + 'S');
@@ -38,6 +38,6 @@ if (Drupal.jsEnabled) {
         });
       });
     });
-    
+
   });
 }
